@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Align Hotel — Rooms & Suites</title>
+  <link href="https://fonts.googleapis.com/css2?family=Engagement&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --warm:       #C5AA98;
+      --cream:      #F1EDEA;
+      --dark:       #1E1410;
+      --mid:        #7A6055;
+      --soft:       #E4DAD4;
+      --gold:       #A5814A;
+      --card-bg:    #FAF8F6;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--cream);
+      color: var(--dark);
+      overflow-x: hidden;
+    }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--cream); }
+    ::-webkit-scrollbar-thumb { background: var(--warm); }
+
+    /* ══════════════════════════════
+       NAV
+    ══════════════════════════════ */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 26px 72px;
+      transition: all 0.5s;
+    }
+    nav.solid {
+      background: rgba(241,237,234,0.96);
+      backdrop-filter: blur(16px);
+      padding: 16px 72px;
+      box-shadow: 0 1px 0 var(--soft), 0 4px 32px rgba(197,170,152,0.18);
+    }
+    .nav-logo {
+      font-family: 'Engagement', cursive;
+      font-size: 2rem; color: var(--dark);
+      text-decoration: none; letter-spacing: 1px;
+    }
+    .nav-links { display: flex; gap: 36px; list-style: none; }
+    .nav-links a {
+      font-size: 0.6rem; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--mid); text-decoration: none; transition: color 0.3s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--dark); }
+    .nav-book {
+      font-size: 0.58rem; letter-spacing: 3px; text-transform: uppercase;
+      padding: 10px 28px; background: var(--dark); color: var(--cream);
+      border: none; cursor: pointer; font-family: 'Jost', sans-serif;
+      font-weight: 400; transition: all 0.3s;
+    }
+    .nav-book:hover { background: var(--gold); }
+
+    /* ══════════════════════════════
+       HERO BANNER
+    ══════════════════════════════ */
+    .rooms-hero {
+      position: relative; height: 70vh; min-height: 560px;
+      display: flex; align-items: flex-end;
+      overflow: hidden;
+    }
+    .rooms-hero-bg {
+      position: absolute; inset: 0;
+      background: url('https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=1800&q=85') center/cover no-repeat;
+      animation: slowZoom 22s ease-in-out infinite alternate;
+    }
+    @keyframes slowZoom {
+      from { transform: scale(1); }
+      to   { transform: scale(1.06); }
+    }
+    .rooms-hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(20,12,8,0.82) 0%, rgba(20,12,8,0.28) 55%, rgba(197,170,152,0.08) 100%);
+    }
+    .rooms-hero-content {
+      position: relative; z-index: 2;
+      padding: 0 72px 72px;
+      animation: riseUp 1.2s 0.3s ease both;
+    }
+    @keyframes riseUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero-tag {
+      font-size: 0.56rem; letter-spacing: 6px; text-transform: uppercase;
+      color: var(--warm); margin-bottom: 14px; display: block;
+    }
+    .rooms-hero h1 {
+      font-family: 'Engagement', cursive;
+      font-size: clamp(3.6rem, 8vw, 7rem);
+      color: var(--cream); line-height: 0.95;
+      text-shadow: 0 4px 40px rgba(20,12,8,0.5);
+    }
+    .rooms-hero p {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-size: 1.1rem;
+      color: rgba(241,237,234,0.65); margin-top: 14px;
+      letter-spacing: 1.5px;
+    }
+    /* breadcrumb */
+    .rooms-hero-breadcrumb {
+      position: absolute; top: 120px; right: 72px;
+      z-index: 2; display: flex; align-items: center; gap: 10px;
+      font-size: 0.55rem; letter-spacing: 3px; text-transform: uppercase;
+      color: rgba(241,237,234,0.45);
+    }
+    .rooms-hero-breadcrumb span { color: var(--warm); }
+
+    /* ══════════════════════════════
+       FILTER BAR
+    ══════════════════════════════ */
+    .filter-bar {
+      background: var(--dark);
+      display: flex; justify-content: center; align-items: center;
+      gap: 0; flex-wrap: wrap;
+    }
+    .filter-btn {
+      padding: 18px 36px;
+      font-size: 0.58rem; letter-spacing: 3px; text-transform: uppercase;
+      color: rgba(241,237,234,0.45); background: transparent;
+      border: none; border-right: 1px solid rgba(197,170,152,0.1);
+      cursor: pointer; font-family: 'Jost', sans-serif;
+      transition: all 0.3s; position: relative;
+    }
+    .filter-btn::after {
+      content: ''; position: absolute; bottom: 0; left: 50%; right: 50%;
+      height: 2px; background: var(--warm); transition: all 0.3s;
+    }
+    .filter-btn:hover, .filter-btn.active { color: var(--cream); }
+    .filter-btn:hover::after, .filter-btn.active::after { left: 0; right: 0; }
+
+    /* ══════════════════════════════
+       SECTION HEADER
+    ══════════════════════════════ */
+    .sec-header {
+      text-align: center;
+      padding: 90px 72px 60px;
+    }
+    .eyebrow {
+      font-size: 0.56rem; letter-spacing: 6px; text-transform: uppercase;
+      color: var(--warm); display: block; margin-bottom: 16px;
+    }
+    .sec-title {
+      font-family: 'Engagement', cursive;
+      font-size: clamp(2.8rem, 5vw, 4.2rem);
+      color: var(--dark); line-height: 1;
+    }
+    .ornament {
+      display: block; font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem; color: var(--warm);
+      letter-spacing: 10px; margin: 14px 0;
+    }
+    .sec-desc {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-size: 1.1rem; color: var(--mid);
+      max-width: 520px; margin: 0 auto; line-height: 1.9;
+    }
+
+    /* ══════════════════════════════
+       LUXURY ROOMS — FEATURE LAYOUT
+    ══════════════════════════════ */
+    #luxury { background: var(--cream); }
+
+    .luxury-featured {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: 0;
+      margin: 0 72px 6px;
+      height: 600px;
+    }
+    .lux-main-img {
+      position: relative; overflow: hidden;
+    }
+    .lux-main-img img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.8s ease;
+    }
+    .lux-main-img:hover img { transform: scale(1.04); }
+    .lux-main-badge {
+      position: absolute; top: 32px; left: 32px;
+      background: var(--dark); color: var(--cream);
+      padding: 8px 18px;
+      font-size: 0.52rem; letter-spacing: 3px; text-transform: uppercase;
+    }
+    .lux-main-info {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: linear-gradient(to top, rgba(20,12,8,0.88), transparent);
+      padding: 40px 36px 32px;
+    }
+    .lux-main-info h3 {
+      font-family: 'Engagement', cursive;
+      font-size: 2.6rem; color: var(--cream); line-height: 1;
+    }
+    .lux-main-info p {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-size: 0.96rem;
+      color: rgba(241,237,234,0.65); margin: 8px 0 14px;
+    }
+    .lux-main-price {
+      font-family: 'Engagement', cursive;
+      font-size: 1.9rem; color: var(--warm);
+    }
+    .lux-main-price span {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.54rem; letter-spacing: 2px; color: rgba(241,237,234,0.45);
+      text-transform: uppercase; margin-left: 6px;
+    }
+
+    .lux-side {
+      display: grid; grid-template-rows: 1fr 1fr; gap: 6px;
+      padding-left: 6px;
+    }
+    .lux-side-card {
+      position: relative; overflow: hidden; cursor: pointer;
+    }
+    .lux-side-card img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.7s ease;
+    }
+    .lux-side-card:hover img { transform: scale(1.06); }
+    .lux-side-info {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: linear-gradient(to top, rgba(20,12,8,0.82), transparent);
+      padding: 28px 24px 20px;
+    }
+    .lux-side-info h4 {
+      font-family: 'Engagement', cursive;
+      font-size: 1.8rem; color: var(--cream);
+    }
+    .lux-side-price {
+      font-family: 'Engagement', cursive;
+      font-size: 1.3rem; color: var(--warm); margin-top: 4px;
+    }
+
+    /* Luxury cards grid */
+    .luxury-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin: 6px 72px 0;
+    }
+    .lux-card {
+      position: relative; overflow: hidden;
+      height: 440px; cursor: pointer;
+      background: var(--card-bg);
+    }
+    .lux-card-img {
+      height: 280px; overflow: hidden; position: relative;
+    }
+    .lux-card-img img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    .lux-card:hover .lux-card-img img { transform: scale(1.08); }
+    .lux-card-tag {
+      position: absolute; top: 18px; right: 18px;
+      background: var(--warm); color: var(--dark);
+      padding: 5px 14px;
+      font-size: 0.5rem; letter-spacing: 2.5px; text-transform: uppercase;
+      font-weight: 500;
+    }
+    .lux-card-body {
+      padding: 28px 28px 24px;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .lux-card-body h3 {
+      font-family: 'Engagement', cursive;
+      font-size: 1.9rem; color: var(--dark); line-height: 1;
+    }
+    .lux-card-body p {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-size: 0.96rem;
+      color: var(--mid); line-height: 1.7;
+    }
+    .lux-card-footer {
+      display: flex; justify-content: space-between;
+      align-items: center; margin-top: auto; padding-top: 14px;
+      border-top: 1px solid var(--soft);
+    }
+    .lux-card-price strong {
+      font-family: 'Engagement', cursive;
+      font-size: 1.6rem; color: var(--gold);
+    }
+    .lux-card-price small {
+      font-size: 0.52rem; letter-spacing: 2px; color: var(--mid);
+      text-transform: uppercase; margin-left: 4px;
+    }
+    .lux-card-amenities {
+      display: flex; gap: 10px;
+    }
+    .amenity-dot {
+      font-size: 0.5rem; letter-spacing: 1px; text-transform: uppercase;
+      color: var(--mid); display: flex; align-items: center; gap: 4px;
+    }
+    .amenity-dot::before {
+      content: ''; width: 5px; height: 5px;
+      border-radius: 50%; background: var(--warm); display: block;
+    }
+    .btn-book {
+      display: inline-block; padding: 10px 24px;
+      background: var(--dark); color: var(--cream);
+      font-size: 0.54rem; letter-spacing: 3px; text-transform: uppercase;
+      border: none; cursor: pointer; font-family: 'Jost', sans-serif;
+      transition: all 0.3s; text-decoration: none;
+      opacity: 0; transform: translateY(6px);
+      transition: opacity 0.3s, transform 0.3s, background 0.3s;
+    }
+    .lux-card:hover .btn-book { opacity: 1; transform: translateY(0); }
+    .btn-book:hover { background: var(--gold); }
+
+    /* ══════════════════════════════
+       PRO DESIGN ROOMS
+    ══════════════════════════════ */
+    #pro { background: var(--dark); padding-bottom: 100px; }
+    #pro .sec-title { color: var(--cream); }
+    #pro .sec-desc { color: rgba(241,237,234,0.5); }
+    #pro .ornament { color: var(--warm); opacity: 0.7; }
+    #pro .eyebrow { color: var(--warm); }
+
+    /* Horizontal scroll cards */
+    .pro-scroll-container {
+      overflow: hidden;
+      padding: 0 72px;
+      position: relative;
+    }
+    .pro-track {
+      display: flex; gap: 24px;
+      transition: transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    .pro-card {
+      flex: 0 0 calc(33.333% - 16px);
+      min-width: 360px;
+      background: rgba(197,170,152,0.06);
+      border: 1px solid rgba(197,170,152,0.1);
+      overflow: hidden;
+      transition: border-color 0.4s, transform 0.4s;
+      cursor: pointer;
+    }
+    .pro-card:hover {
+      border-color: rgba(197,170,152,0.35);
+      transform: translateY(-6px);
+    }
+    .pro-card-img {
+      position: relative; height: 320px; overflow: hidden;
+    }
+    .pro-card-img img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.8s ease;
+      filter: brightness(0.9);
+    }
+    .pro-card:hover .pro-card-img img {
+      transform: scale(1.06); filter: brightness(1);
+    }
+    .pro-card-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(20,12,8,0.7) 0%, transparent 50%);
+    }
+    .pro-card-number {
+      position: absolute; top: 20px; left: 20px;
+      font-family: 'Engagement', cursive;
+      font-size: 3.5rem; color: rgba(197,170,152,0.25);
+      line-height: 1;
+    }
+    .pro-card-ribbon {
+      position: absolute; top: 22px; right: 0;
+      background: var(--warm); color: var(--dark);
+      padding: 5px 18px 5px 12px;
+      font-size: 0.5rem; letter-spacing: 2px; text-transform: uppercase;
+      font-weight: 500;
+    }
+    .pro-card-body { padding: 28px 28px 32px; }
+    .pro-card-cat {
+      font-size: 0.52rem; letter-spacing: 4px; text-transform: uppercase;
+      color: var(--warm); margin-bottom: 10px; display: block;
+    }
+    .pro-card-name {
+      font-family: 'Engagement', cursive;
+      font-size: 2rem; color: var(--cream); line-height: 1; margin-bottom: 14px;
+    }
+    .pro-card-desc {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.96rem; font-style: italic;
+      color: rgba(241,237,234,0.5); line-height: 1.8; margin-bottom: 22px;
+    }
+    .pro-features {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 10px; margin-bottom: 24px;
+    }
+    .pro-feature {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.58rem; letter-spacing: 1px; text-transform: uppercase;
+      color: rgba(241,237,234,0.45);
+    }
+    .pro-feature-icon {
+      width: 26px; height: 26px;
+      border: 1px solid rgba(197,170,152,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; color: var(--warm); flex-shrink: 0;
+    }
+    .pro-card-footer {
+      display: flex; justify-content: space-between; align-items: center;
+      border-top: 1px solid rgba(197,170,152,0.12); padding-top: 20px;
+    }
+    .pro-price strong {
+      font-family: 'Engagement', cursive;
+      font-size: 1.8rem; color: var(--warm);
+    }
+    .pro-price small {
+      font-size: 0.5rem; letter-spacing: 2px; color: rgba(241,237,234,0.3);
+      text-transform: uppercase; margin-left: 4px;
+    }
+    .pro-btn {
+      padding: 10px 22px;
+      border: 1px solid rgba(197,170,152,0.3); background: transparent;
+      color: var(--warm); font-family: 'Jost', sans-serif;
+      font-size: 0.54rem; letter-spacing: 3px; text-transform: uppercase;
+      cursor: pointer; transition: all 0.3s;
+    }
+    .pro-btn:hover { background: var(--warm); color: var(--dark); border-color: var(--warm); }
+
+    /* track nav */
+    .pro-nav {
+      display: flex; justify-content: center; gap: 14px; margin-top: 48px;
+    }
+    .pro-nav-btn {
+      width: 48px; height: 48px; border: 1px solid rgba(197,170,152,0.22);
+      background: transparent; color: var(--warm);
+      font-size: 1.1rem; cursor: pointer; transition: all 0.3s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .pro-nav-btn:hover { background: var(--warm); color: var(--dark); border-color: var(--warm); }
+
+    /* ══════════════════════════════
+       COMPARISON TABLE
+    ══════════════════════════════ */
+    #compare { background: var(--cream); padding: 100px 72px; }
+    .compare-table {
+      width: 100%; border-collapse: collapse; margin-top: 60px;
+      overflow: hidden;
+    }
+    .compare-table thead tr {
+      background: var(--dark);
+    }
+    .compare-table th {
+      padding: 22px 28px;
+      font-size: 0.58rem; letter-spacing: 3px; text-transform: uppercase;
+      font-weight: 400; color: rgba(241,237,234,0.6); text-align: left;
+    }
+    .compare-table th:first-child { color: var(--warm); }
+    .compare-table th.highlight {
+      background: var(--warm); color: var(--dark);
+    }
+    .compare-table tbody tr {
+      border-bottom: 1px solid var(--soft);
+      transition: background 0.2s;
+    }
+    .compare-table tbody tr:hover { background: rgba(197,170,152,0.07); }
+    .compare-table td {
+      padding: 18px 28px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem; color: var(--mid);
+    }
+    .compare-table td:first-child {
+      font-size: 0.62rem; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--dark); font-family: 'Jost', sans-serif; font-weight: 300;
+    }
+    .compare-table td.highlight {
+      background: rgba(197,170,152,0.08);
+      font-weight: 500; color: var(--dark);
+    }
+    .check { color: var(--gold); font-size: 1rem; }
+    .cross { color: rgba(122,96,85,0.35); font-size: 1rem; }
+
+    /* ══════════════════════════════
+       BOOKING STRIP
+    ══════════════════════════════ */
+    .booking-strip {
+      background: var(--warm);
+      padding: 60px 72px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 40px; flex-wrap: wrap;
+    }
+    .booking-strip-text h2 {
+      font-family: 'Engagement', cursive;
+      font-size: clamp(2.2rem, 4vw, 3.4rem);
+      color: var(--dark); line-height: 1;
+    }
+    .booking-strip-text p {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-size: 1rem;
+      color: rgba(30,20,16,0.65); margin-top: 8px;
+    }
+    .booking-fields {
+      display: flex; gap: 0; flex: 1;
+      max-width: 640px;
+      border: 1px solid rgba(30,20,16,0.2);
+    }
+    .booking-field {
+      flex: 1; padding: 14px 20px;
+      border-right: 1px solid rgba(30,20,16,0.15);
+      display: flex; flex-direction: column; gap: 4px;
+      background: rgba(241,237,234,0.25);
+    }
+    .booking-field:last-of-type { border-right: none; }
+    .booking-field label {
+      font-size: 0.46rem; letter-spacing: 3px; text-transform: uppercase;
+      color: rgba(30,20,16,0.55);
+    }
+    .booking-field input, .booking-field select {
+      background: transparent; border: none; outline: none;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.95rem; color: var(--dark); cursor: pointer;
+    }
+    .booking-field select option { background: var(--cream); }
+    .booking-submit {
+      padding: 0 36px;
+      background: var(--dark); color: var(--cream);
+      border: none; cursor: pointer;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.58rem; letter-spacing: 3px; text-transform: uppercase;
+      transition: background 0.3s; white-space: nowrap;
+    }
+    .booking-submit:hover { background: #3a2a1e; }
+
+    /* ══════════════════════════════
+       TESTIMONIAL BAR
+    ══════════════════════════════ */
+    .testimonial-bar {
+      background: var(--soft);
+      padding: 60px 72px;
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 1px;
+    }
+    .test-item {
+      padding: 0 40px;
+      border-right: 1px solid var(--warm);
+    }
+    .test-item:first-child { padding-left: 0; }
+    .test-item:last-child { border-right: none; }
+    .test-stars { color: var(--gold); font-size: 0.8rem; letter-spacing: 4px; margin-bottom: 14px; }
+    .test-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-size: 1.05rem;
+      color: var(--dark); line-height: 1.8; margin-bottom: 18px;
+    }
+    .test-author {
+      font-size: 0.54rem; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--warm);
+    }
+
+    /* ══════════════════════════════
+       FOOTER
+    ══════════════════════════════ */
+    footer {
+      background: var(--dark);
+      padding: 50px 72px;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 20px;
+    }
+    .footer-logo {
+      font-family: 'Engagement', cursive;
+      font-size: 2.4rem; color: var(--cream);
+    }
+    .footer-copy {
+      font-size: 0.52rem; letter-spacing: 2px;
+      color: rgba(241,237,234,0.28); text-align: center;
+    }
+    .footer-links { display: flex; gap: 28px; }
+    .footer-links a {
+      font-size: 0.54rem; letter-spacing: 2px; text-transform: uppercase;
+      color: rgba(241,237,234,0.35); text-decoration: none; transition: color 0.3s;
+    }
+    .footer-links a:hover { color: var(--warm); }
+
+    /* ══════════════════════════════
+       MODAL
+    ══════════════════════════════ */
+    .modal-bg {
+      display: none; position: fixed; inset: 0; z-index: 9999;
+      background: rgba(20,12,8,0.8); backdrop-filter: blur(8px);
+      align-items: center; justify-content: center;
+    }
+    .modal-bg.open { display: flex; }
+    .modal {
+      background: var(--cream); padding: 58px 52px;
+      max-width: 500px; width: 92%; position: relative;
+      animation: riseUp 0.4s ease;
+    }
+    .modal-close {
+      position: absolute; top: 18px; right: 22px;
+      background: none; border: none; font-size: 1.3rem;
+      cursor: pointer; color: var(--mid);
+    }
+    .modal h2 {
+      font-family: 'Engagement', cursive;
+      font-size: 2.8rem; color: var(--dark); margin-bottom: 6px;
+    }
+    .modal-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-size: 0.96rem;
+      color: var(--mid); margin-bottom: 28px;
+    }
+    .modal-form { display: flex; flex-direction: column; gap: 14px; }
+    .modal-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .mf-group { display: flex; flex-direction: column; gap: 6px; }
+    .mf-group label {
+      font-size: 0.5rem; letter-spacing: 3px; text-transform: uppercase; color: var(--mid);
+    }
+    .mf-group input, .mf-group select {
+      background: var(--soft); border: 1px solid transparent;
+      padding: 12px 16px; font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem; color: var(--dark); outline: none;
+      transition: border-color 0.3s;
+    }
+    .mf-group input:focus, .mf-group select:focus { border-color: var(--warm); }
+    .modal-submit {
+      padding: 14px; background: var(--dark); color: var(--cream);
+      border: none; cursor: pointer; font-family: 'Jost', sans-serif;
+      font-size: 0.6rem; letter-spacing: 3px; text-transform: uppercase;
+      margin-top: 8px; transition: background 0.3s;
+    }
+    .modal-submit:hover { background: var(--gold); }
+
+    /* ══════════════════════════════
+       REVEAL ANIMATION
+    ══════════════════════════════ */
+    .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.9s ease, transform 0.9s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.22s; }
+    .reveal-delay-3 { transition-delay: 0.34s; }
+
+    @media (max-width: 1100px) {
+      nav, nav.solid { padding-left: 32px; padding-right: 32px; }
+      .rooms-hero-content, .rooms-hero-breadcrumb { padding-left: 32px; padding-right: 32px; }
+      .luxury-featured, .luxury-grid { margin-left: 32px; margin-right: 32px; }
+      .pro-scroll-container, #compare, .booking-strip, .testimonial-bar, footer { padding-left: 32px; padding-right: 32px; }
+      .nav-links { display: none; }
+    }
+    @media (max-width: 820px) {
+      .luxury-featured { grid-template-columns: 1fr; height: auto; }
+      .lux-main-img { height: 380px; }
+      .lux-side { grid-template-columns: 1fr 1fr; grid-template-rows: auto; padding-left: 0; padding-top: 6px; }
+      .lux-side-card { height: 220px; }
+      .luxury-grid { grid-template-columns: 1fr; }
+      .lux-card { height: auto; }
+      .pro-card { min-width: 300px; }
+      .testimonial-bar { grid-template-columns: 1fr; gap: 30px; }
+      .test-item { border-right: none; border-bottom: 1px solid var(--warm); padding: 0 0 30px; }
+      .test-item:last-child { border-bottom: none; }
+      .booking-strip { flex-direction: column; }
+      .booking-fields { max-width: 100%; width: 100%; flex-direction: column; border: none; gap: 2px; }
+      .booking-field { border-right: none; border-bottom: 1px solid rgba(30,20,16,0.15); }
+      footer { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <a href="#" class="nav-logo">Align Hotel</a>
+  <ul class="nav-links">
+    <li><a href="#luxury" class="active">Luxury Rooms</a></li>
+    <li><a href="#pro">Pro Design</a></li>
+    <li><a href="#compare">Compare</a></li>
+  </ul>
+  <button class="nav-book" onclick="openModal()">Book a Room</button>
+</nav>
+
+<!-- HERO BANNER -->
+<div class="rooms-hero">
+  <div class="rooms-hero-bg"></div>
+  <div class="rooms-hero-overlay"></div>
+  <div class="rooms-hero-breadcrumb">
+    Home <span>›</span> <span>Rooms & Suites</span>
+  </div>
+  <div class="rooms-hero-content">
+    <span class="hero-tag">Align Hotel · Since 1989</span>
+    <h1>Rooms<br>&amp; Suites</h1>
+    <p>Crafted for those who demand nothing less than extraordinary</p>
+  </div>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <button class="filter-btn active" onclick="setFilter(this,'all')">All Rooms</button>
+  <button class="filter-btn" onclick="setFilter(this,'luxury')">Luxury</button>
+  <button class="filter-btn" onclick="setFilter(this,'pro')">Pro Design</button>
+  <button class="filter-btn" onclick="setFilter(this,'suite')">Suites</button>
+  <button class="filter-btn" onclick="setFilter(this,'villa')">Villa</button>
+</div>
+
+<!-- ══ LUXURY ROOMS ══ -->
+<section id="luxury">
+  <div class="sec-header reveal">
+    <span class="eyebrow">Collection One</span>
+    <h2 class="sec-title">Luxury Rooms</h2>
+    <span class="ornament">✦ ✦ ✦</span>
+    <p class="sec-desc">Each luxury room is a sanctuary — thoughtfully appointed with hand-selected furnishings, bespoke amenities, and panoramic views that inspire.</p>
+  </div>
+
+  <!-- Featured Hero Layout -->
+  <div class="luxury-featured reveal">
+    <div class="lux-main-img">
+      <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=1200&q=85" alt="Grand Luxury Suite" />
+      <div class="lux-main-badge">Signature Collection</div>
+      <div class="lux-main-info">
+        <h3>Grand Luxury Suite</h3>
+        <p>Panoramic city views · King bed · Private terrace · Butler service</p>
+        <div class="lux-main-price">$899 <span>/ night</span></div>
+      </div>
+    </div>
+    <div class="lux-side">
+      <div class="lux-side-card">
+        <img src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=800&q=80" alt="Deluxe King Room" />
+        <div class="lux-side-info">
+          <h4>Deluxe King Room</h4>
+          <div class="lux-side-price">$399 <span style="font-family:'Jost';font-size:0.5rem;letter-spacing:2px;color:rgba(241,237,234,0.4);text-transform:uppercase"> / night</span></div>
+        </div>
+      </div>
+      <div class="lux-side-card">
+        <img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&q=80" alt="Superior Twin Room" />
+        <div class="lux-side-info">
+          <h4>Superior Twin Room</h4>
+          <div class="lux-side-price">$299 <span style="font-family:'Jost';font-size:0.5rem;letter-spacing:2px;color:rgba(241,237,234,0.4);text-transform:uppercase"> / night</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3-card grid -->
+  <div class="luxury-grid">
+
+    <!-- Card 1 -->
+    <div class="lux-card reveal reveal-delay-1">
+      <div class="lux-card-img">
+        <img src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=900&q=80" alt="Classic Luxury Room" />
+        <span class="lux-card-tag">Most Popular</span>
+      </div>
+      <div class="lux-card-body">
+        <h3>Classic Luxury Room</h3>
+        <p>A timeless retreat featuring warm wood tones, a plush king bed, and floor-to-ceiling drapes framing garden views.</p>
+        <div class="lux-card-amenities">
+          <span class="amenity-dot">King Bed</span>
+          <span class="amenity-dot">City View</span>
+          <span class="amenity-dot">Mini Bar</span>
+        </div>
+        <div class="lux-card-footer">
+          <div class="lux-card-price">
+            <strong>$349</strong><small>/ night</small>
+          </div>
+          <button class="btn-book" onclick="openModal()">Reserve</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="lux-card reveal reveal-delay-2">
+      <div class="lux-card-img">
+        <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=900&q=80" alt="Prestige Room" />
+        <span class="lux-card-tag">New</span>
+      </div>
+      <div class="lux-card-body">
+        <h3>Prestige Room</h3>
+        <p>Elevated living with bespoke marble accents, a soaking tub, and curated artwork from local artists.</p>
+        <div class="lux-card-amenities">
+          <span class="amenity-dot">King Bed</span>
+          <span class="amenity-dot">Soaking Tub</span>
+          <span class="amenity-dot">Balcony</span>
+        </div>
+        <div class="lux-card-footer">
+          <div class="lux-card-price">
+            <strong>$499</strong><small>/ night</small>
+          </div>
+          <button class="btn-book" onclick="openModal()">Reserve</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="lux-card reveal reveal-delay-3">
+      <div class="lux-card-img">
+        <img src="https://images.unsplash.com/photo-1560185007-5f0bb1866cab?w=900&q=80" alt="Garden View Room" />
+        <span class="lux-card-tag">Garden Wing</span>
+      </div>
+      <div class="lux-card-body">
+        <h3>Garden View Room</h3>
+        <p>Awaken to manicured gardens below. Soft linen tones, a walk-in rainfall shower, and quiet luxury throughout.</p>
+        <div class="lux-card-amenities">
+          <span class="amenity-dot">Queen Bed</span>
+          <span class="amenity-dot">Garden View</span>
+          <span class="amenity-dot">Rain Shower</span>
+        </div>
+        <div class="lux-card-footer">
+          <div class="lux-card-price">
+            <strong>$279</strong><small>/ night</small>
+          </div>
+          <button class="btn-book" onclick="openModal()">Reserve</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="lux-card reveal reveal-delay-1">
+      <div class="lux-card-img">
+        <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=900&q=80" alt="Heritage Room" />
+        <span class="lux-card-tag">Heritage</span>
+      </div>
+      <div class="lux-card-body">
+        <h3>Heritage Room</h3>
+        <p>Steeped in the history of 1989, this room blends antique charm with modern comforts and hand-laid mosaic bathrooms.</p>
+        <div class="lux-card-amenities">
+          <span class="amenity-dot">King Bed</span>
+          <span class="amenity-dot">Antique Décor</span>
+          <span class="amenity-dot">Mosaic Bath</span>
+        </div>
+        <div class="lux-card-footer">
+          <div class="lux-card-price">
+            <strong>$389</strong><small>/ night</small>
+          </div>
+          <button class="btn-book" onclick="openModal()">Reserve</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 5 -->
+    <div class="lux-card reveal reveal-delay-2">
+      <div class="lux-card-img">
+        <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?w=900&q=80" alt="Pool Access Room" />
+        <span class="lux-card-tag">Pool Access</span>
+      </div>
+      <div class="lux-card-body">
+        <h3>Pool Access Room</h3>
+        <p>Step directly from your terrace into the infinity pool. Private sun loungers and an in-room spa menu included.</p>
+        <div class="lux-card-amenities">
+          <span class="amenity-dot">King Bed</span>
+          <span class="amenity-dot">Pool Access</span>
+          <span class="amenity-dot">Terrace</span>
+        </div>
+        <div class="lux-card-footer">
+          <div class="lux-card-price">
+            <strong>$599</strong><small>/ night</small>
+          </div>
+          <button class="btn-book" onclick="openModal()">Reserve</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 6 -->
+    <div class="lux-card reveal reveal-delay-3">
+      <div class="lux-card-img">
+        <img src="https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=900&q=80" alt="Corner Suite Room" />
+        <span class="lux-card-tag">Corner Suite</span>
+      </div>
+      <div class="lux-card-body">
+        <h3>Corner Suite Room</h3>
+        <p>Dual-aspect windows capture skyline and sea simultaneously. A double vanity and separate lounge make it unforgettable.</p>
+        <div class="lux-card-amenities">
+          <span class="amenity-dot">King Bed</span>
+          <span class="amenity-dot">Dual Aspect</span>
+          <span class="amenity-dot">Lounge</span>
+        </div>
+        <div class="lux-card-footer">
+          <div class="lux-card-price">
+            <strong>$649</strong><small>/ night</small>
+          </div>
+          <button class="btn-book" onclick="openModal()">Reserve</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ PRO DESIGN ROOMS ══ -->
+<section id="pro">
+  <div class="sec-header reveal">
+    <span class="eyebrow">Collection Two</span>
+    <h2 class="sec-title">Pro Design Rooms</h2>
+    <span class="ornament" style="opacity:0.5">✦ ✦ ✦</span>
+    <p class="sec-desc">Conceived by award-winning architects — each Pro Design room is a living artwork. Form, function, and finesse in perfect equilibrium.</p>
+  </div>
+
+  <div class="pro-scroll-container reveal">
+    <div class="pro-track" id="proTrack">
+
+      <!-- Pro Card 1 -->
+      <div class="pro-card">
+        <div class="pro-card-img">
+          <img src="https://images.unsplash.com/photo-1519643381401-22c77e60520e?w=900&q=80" alt="Monochrome Loft" />
+          <div class="pro-card-overlay"></div>
+          <span class="pro-card-number">01</span>
+          <span class="pro-card-ribbon">Architect's Pick</span>
+        </div>
+        <div class="pro-card-body">
+          <span class="pro-card-cat">Industrial · Minimalist</span>
+          <h3 class="pro-card-name">Monochrome Loft</h3>
+          <p class="pro-card-desc">Raw concrete walls softened by cashmere textiles. A 12-foot ceiling and gallery-lit artwork define this urban sanctuary.</p>
+          <div class="pro-features">
+            <div class="pro-feature"><span class="pro-feature-icon">⬛</span> Concrete Walls</div>
+            <div class="pro-feature"><span class="pro-feature-icon">🪟</span> Floor Windows</div>
+            <div class="pro-feature"><span class="pro-feature-icon">🛁</span> Freestand Tub</div>
+            <div class="pro-feature"><span class="pro-feature-icon">🎨</span> Art Gallery</div>
+          </div>
+          <div class="pro-card-footer">
+            <div class="pro-price"><strong>$749</strong><small>/ night</small></div>
+            <button class="pro-btn" onclick="openModal()">Book Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pro Card 2 -->
+      <div class="pro-card">
+        <div class="pro-card-img">
+          <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=900&q=80" alt="Japandi Sanctuary" />
+          <div class="pro-card-overlay"></div>
+          <span class="pro-card-number">02</span>
+          <span class="pro-card-ribbon">Bestseller</span>
+        </div>
+        <div class="pro-card-body">
+          <span class="pro-card-cat">Japanese · Scandinavian</span>
+          <h3 class="pro-card-name">Japandi Sanctuary</h3>
+          <p class="pro-card-desc">White oak, washi screens, and negative space. Serenity through simplicity — designed by Studio Noma, Tokyo.</p>
+          <div class="pro-features">
+            <div class="pro-feature"><span class="pro-feature-icon">🪵</span> White Oak</div>
+            <div class="pro-feature"><span class="pro-feature-icon">🌿</span> Living Wall</div>
+            <div class="pro-feature"><span class="pro-feature-icon">♨️</span> Onsen Bath</div>
+            <div class="pro-feature"><span class="pro-feature-icon">🕯️</span> Mood Lighting</div>
+          </div>
+          <div class="pro-card-footer">
+            <div class="pro-price"><strong>$869</strong><small>/ night</small></div>
+            <button class="pro-btn" onclick="openModal()">Book Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pro Card 3 -->
+      <div class="pro-card">
+        <div class="pro-card-img">
+          <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=900&q=80" alt="Art Deco Penthouse" />
+          <div class="pro-card-overlay"></div>
+          <span class="pro-card-number">03</span>
+          <span class="pro-card-ribbon">Exclusive</span>
+        </div>
+        <div class="pro-card-body">
+          <span class="pro-card-cat">Art Deco · Maximalist</span>
+          <h3 class="pro-card-name">Art Deco Penthouse</h3>
+          <p class="pro-card-desc">Gilded chevrons, lacquered veneers, and a wraparound terrace. A love letter to the Roaring Twenties, reimagined.</p>
+          <div class="pro-features">
+            <div class="pro-feature"><span class="pro-feature-icon">✨</span> Gold Accents</div>
+            <div class="pro-feature"><span class="pro-feature-icon">🏙️</span> 360° Views</div>
+            <div class="pro-feature"><span class="pro-feature-icon">🍾</span> Bar Trolley</div>
+            <div class="pro-feature"><span class="pro-feature-icon">🛏️</span> Emperor Bed</div>
+          </div>
+          <div class="pro-card-footer">
+            <div class="pro-price"><strong>$1,299</strong><small>/ night</small></div>
+            <button class="pro-btn" onclick="openModal()">Book Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pro Card 4 -->
+      <div class="pro-card">
+        <div class="pro-card-img">
+          <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=900&q=80" alt="Nordic Forest Room" />
+          <div class="pro-card-overlay"></div>
+          <span class="pro-card-number">04</span>
+          <span class="pro-card-ribbon">Nature Retreat</span>
+        </div>
+        <div class="pro-card-body">
+          <span class="pro-card-cat">Nordic · Biophilic</span>
+          <h3 class="pro-card-name">Nordic Forest Room</h3>
+          <p class="pro-card-desc">Floor-to-ceiling pine, a moss accent wall, and a wood-burning stove. Bring the forest inside without leaving luxury behind.</p>
+          <div class="pro-features">
+            <div class="pro-feature"><span class="pro-feature-icon">🌲</span> Pine Ceilings</div>
+            <div class="pro-feature"><span class="pro-feature-icon">🔥</span> Wood Stove</div>
+            <div class="pro-feature"><span class="pro-feature-icon">🌿</span> Moss Walls</div>
+            <div class="pro-feature"><span class="pro-feature-icon">❄️</span> Outdoor Tub</div>
+          </div>
+          <div class="pro-card-footer">
+            <div class="pro-price"><strong>$959</strong><small>/ night</small></div>
+            <button class="pro-btn" onclick="openModal()">Book Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pro Card 5 -->
+      <div class="pro-card">
+        <div class="pro-card-img">
+          <img src="https://images.unsplash.com/photo-1568495248636-6432b97bd949?w=900&q=80" alt="Celestial Sky Room" />
+          <div class="pro-card-overlay"></div>
+          <span class="pro-card-number">05</span>
+          <span class="pro-card-ribbon">Rooftop</span>
+        </div>
+        <div class="pro-card-body">
+          <span class="pro-card-cat">Contemporary · Sky</span>
+          <h3 class="pro-card-name">Celestial Sky Room</h3>
+          <p class="pro-card-desc">A retractable glass ceiling lets you sleep under the stars. Heated stone floors, a telescope, and a champagne welcome await.</p>
+          <div class="pro-features">
+            <div class="pro-feature"><span class="pro-feature-icon">🔭</span> Telescope</div>
+            <div class="pro-feature"><span class="pro-feature-icon">🪟</span> Glass Ceiling</div>
+            <div class="pro-feature"><span class="pro-feature-icon">🌡️</span> Heated Floor</div>
+            <div class="pro-feature"><span class="pro-feature-icon">🍾</span> Welcome Bar</div>
+          </div>
+          <div class="pro-card-footer">
+            <div class="pro-price"><strong>$1,099</strong><small>/ night</small></div>
+            <button class="pro-btn" onclick="openModal()">Book Now</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /pro-track -->
+  </div>
+
+  <div class="pro-nav">
+    <button class="pro-nav-btn" onclick="slideTrack(-1)">&#8592;</button>
+    <button class="pro-nav-btn" onclick="slideTrack(1)">&#8594;</button>
+  </div>
+</section>
+
+<!-- COMPARISON TABLE -->
+<section id="compare">
+  <div class="sec-header reveal" style="padding-top:0">
+    <span class="eyebrow">Side by Side</span>
+    <h2 class="sec-title">Room Comparison</h2>
+    <span class="ornament">✦ ✦ ✦</span>
+  </div>
+  <table class="compare-table reveal">
+    <thead>
+      <tr>
+        <th>Features</th>
+        <th>Classic Luxury</th>
+        <th>Prestige Room</th>
+        <th class="highlight">Grand Suite</th>
+        <th>Pro Japandi</th>
+        <th>Art Deco PH</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Room Size</td><td>38 m²</td><td>48 m²</td><td class="highlight">72 m²</td><td>52 m²</td><td>110 m²</td></tr>
+      <tr><td>Bed Type</td><td>King</td><td>King</td><td class="highlight">Emperor</td><td>King</td><td>Emperor</td></tr>
+      <tr><td>Private Terrace</td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td><td class="highlight"><span class="check">✓</span></td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td></tr>
+      <tr><td>Soaking Tub</td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td><td class="highlight"><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+      <tr><td>Butler Service</td><td><span class="cross">✕</span></td><td><span class="cross">✕</span></td><td class="highlight"><span class="check">✓</span></td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td></tr>
+      <tr><td>Mini Bar</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td class="highlight"><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+      <tr><td>Daily Breakfast</td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td><td class="highlight"><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+      <tr><td>Designer Bathrobes</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td class="highlight"><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+      <tr><td>Nightly Rate (from)</td><td>$349</td><td>$499</td><td class="highlight" style="color:var(--gold);font-family:'Engagement',cursive;font-size:1.1rem">$899</td><td>$869</td><td>$1,299</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- BOOKING STRIP -->
+<div class="booking-strip reveal">
+  <div class="booking-strip-text">
+    <h2>Reserve Your Room Tonight</h2>
+    <p>Best rate guaranteed · Free cancellation · Instant confirmation</p>
+  </div>
+  <div class="booking-fields">
+    <div class="booking-field">
+      <label>Check In</label>
+      <input type="date" id="checkin"/>
+    </div>
+    <div class="booking-field">
+      <label>Check Out</label>
+      <input type="date" id="checkout"/>
+    </div>
+    <div class="booking-field">
+      <label>Room Type</label>
+      <select>
+        <option>Classic Luxury</option>
+        <option>Prestige Room</option>
+        <option>Grand Suite</option>
+        <option>Japandi Sanctuary</option>
+        <option>Art Deco Penthouse</option>
+      </select>
+    </div>
+    <button class="booking-submit" onclick="openModal()">Check Rates</button>
+  </div>
+</div>
+
+<!-- TESTIMONIALS -->
+<div class="testimonial-bar reveal">
+  <div class="test-item">
+    <div class="test-stars">★★★★★</div>
+    <p class="test-quote">"The Grand Luxury Suite was beyond any expectation. Every single detail felt considered, intentional, and deeply luxurious."</p>
+    <span class="test-author">— Sofia L., Milan</span>
+  </div>
+  <div class="test-item">
+    <div class="test-stars">★★★★★</div>
+    <p class="test-quote">"The Japandi Sanctuary completely changed how I think about hotel design. We booked the same room three nights in a row."</p>
+    <span class="test-author">— Marcus T., Copenhagen</span>
+  </div>
+  <div class="test-item">
+    <div class="test-stars">★★★★★</div>
+    <p class="test-quote">"Waking up in the Art Deco Penthouse with the city laid out below us — it's the kind of memory that stays with you forever."</p>
+    <span class="test-author">— Priya &amp; Arun K., Singapore</span>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-logo">Align Hotel</span>
+  <p class="footer-copy">© 2024 Align Hotel · Est. 1989 · All Rights Reserved</p>
+  <div class="footer-links">
+    <a href="#">Home</a>
+    <a href="#">Dining</a>
+    <a href="#">Spa</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-bg" id="bookModal" onclick="closeModalBg(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h2>Book Your Stay</h2>
+    <p class="modal-sub">Our reservations team will confirm within 2 hours.</p>
+    <div class="modal-form">
+      <div class="modal-row">
+        <div class="mf-group">
+          <label>First Name</label>
+          <input type="text" placeholder="Catherine"/>
+        </div>
+        <div class="mf-group">
+          <label>Last Name</label>
+          <input type="text" placeholder="Monroe"/>
+        </div>
+      </div>
+      <div class="mf-group">
+        <label>Email Address</label>
+        <input type="email" placeholder="your@email.com"/>
+      </div>
+      <div class="modal-row">
+        <div class="mf-group">
+          <label>Check In</label>
+          <input type="date"/>
+        </div>
+        <div class="mf-group">
+          <label>Check Out</label>
+          <input type="date"/>
+        </div>
+      </div>
+      <div class="mf-group">
+        <label>Room Selection</label>
+        <select>
+          <option>Classic Luxury Room — $349/night</option>
+          <option>Prestige Room — $499/night</option>
+          <option>Grand Luxury Suite — $899/night</option>
+          <option>Monochrome Loft — $749/night</option>
+          <option>Japandi Sanctuary — $869/night</option>
+          <option>Art Deco Penthouse — $1,299/night</option>
+          <option>Nordic Forest Room — $959/night</option>
+          <option>Celestial Sky Room — $1,099/night</option>
+        </select>
+      </div>
+      <button class="modal-submit" onclick="closeModal()">Confirm Reservation</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── Sticky Nav ──
+  const nav = document.getElementById('mainNav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('solid', window.scrollY > 60);
+  });
+
+  // ── Scroll Reveal ──
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  // ── Filter Bar ──
+  function setFilter(btn, cat) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  // ── Pro Track Slider ──
+  let proPos = 0;
+  function slideTrack(dir) {
+    const track = document.getElementById('proTrack');
+    const card = track.querySelector('.pro-card');
+    const cardW = card.offsetWidth + 24;
+    const maxPos = -(track.scrollWidth - track.parentElement.offsetWidth);
+    proPos = Math.min(0, Math.max(maxPos, proPos - dir * cardW));
+    track.style.transform = `translateX(${proPos}px)`;
+  }
+
+  // ── Modal ──
+  function openModal() { document.getElementById('bookModal').classList.add('open'); }
+  function closeModal() { document.getElementById('bookModal').classList.remove('open'); }
+  function closeModalBg(e) { if (e.target === document.getElementById('bookModal')) closeModal(); }
+
+  // ── Date defaults ──
+  const today = new Date();
+  const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1);
+  const fmt = d => d.toISOString().split('T')[0];
+  document.querySelectorAll('input[type=date]').forEach((el, i) => {
+    el.value = i % 2 === 0 ? fmt(today) : fmt(tomorrow);
+  });
+</script>
+</body>
+</html>

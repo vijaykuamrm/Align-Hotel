@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Aurum Response — Luxury Emergency Services</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Cinzel:wght@400;600;700;900&family=Jost:wght@200;300;400;500;600&display=swap" rel="stylesheet"/>
+
+<style>
+:root {
+  --gold:    #C5AA98;
+  --cream:   #F1EDEA;
+  --dark:    #0D0907;
+  --deep:    #150F0A;
+  --mid:     #8B6E5E;
+  --light:   #E8DDD7;
+  --dimmed:  rgba(197,170,152,0.55);
+  --fire:    #C5AA98;
+  --border:  rgba(197,170,152,0.18);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Jost', sans-serif;
+  background: var(--dark);
+  color: var(--cream);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--dark); }
+::-webkit-scrollbar-thumb { background: var(--gold); }
+
+/* ── CUSTOM CURSOR ── */
+#cursor-dot {
+  width: 6px; height: 6px;
+  background: var(--gold);
+  border-radius: 50%;
+  position: fixed; z-index: 99999;
+  pointer-events: none;
+  transform: translate(-50%,-50%);
+}
+#cursor-ring {
+  width: 32px; height: 32px;
+  border: 1px solid rgba(197,170,152,0.5);
+  border-radius: 50%;
+  position: fixed; z-index: 99998;
+  pointer-events: none;
+  transform: translate(-50%,-50%);
+  transition: width 0.2s, height 0.2s, border-color 0.2s;
+}
+
+/* ── NOISE GRAIN ── */
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 9997; opacity: 0.6;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 28px 72px;
+  transition: all 0.5s ease;
+}
+nav.scrolled {
+  background: rgba(13,9,7,0.96);
+  backdrop-filter: blur(20px);
+  padding: 18px 72px;
+  border-bottom: 1px solid var(--border);
+}
+.nav-brand {
+  display: flex; align-items: center; gap: 14px;
+  text-decoration: none;
+}
+.nav-brand-icon {
+  width: 38px; height: 38px;
+  border: 1px solid var(--gold);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+}
+.nav-brand-text {
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem; letter-spacing: 0.4em;
+  color: var(--cream); text-transform: uppercase;
+}
+.nav-brand-sub {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: 0.7rem;
+  color: var(--gold); letter-spacing: 0.15em;
+}
+.nav-right {
+  display: flex; align-items: center; gap: 32px;
+}
+.nav-status {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.52rem; letter-spacing: 0.25em; text-transform: uppercase;
+  color: rgba(241,237,234,0.45);
+}
+.status-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #4ade80;
+  animation: pulse-green 2s ease-in-out infinite;
+}
+@keyframes pulse-green {
+  0%,100% { box-shadow: 0 0 0 0 rgba(74,222,128,0.4); }
+  50%      { box-shadow: 0 0 0 6px rgba(74,222,128,0); }
+}
+.nav-emergency-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 0.52rem; letter-spacing: 0.25em; text-transform: uppercase;
+  padding: 11px 24px;
+  background: var(--gold); color: var(--dark);
+  border: none; cursor: pointer; transition: all 0.3s;
+  text-decoration: none; display: block;
+}
+.nav-emergency-btn:hover { background: var(--cream); }
+
+/* ── HERO ── */
+#hero {
+  position: relative; min-height: 100vh;
+  display: flex; align-items: center;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920&q=85') center/cover no-repeat;
+  animation: heroZoom 20s ease-in-out infinite alternate;
+}
+@keyframes heroZoom {
+  from { transform: scale(1); }
+  to   { transform: scale(1.06); }
+}
+.hero-overlay {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(to right, rgba(13,9,7,0.95) 0%, rgba(13,9,7,0.65) 55%, rgba(13,9,7,0.25) 100%),
+    linear-gradient(to top, rgba(13,9,7,0.8) 0%, transparent 40%);
+}
+.hero-grid-overlay {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 90px 90px;
+  pointer-events: none;
+}
+.hero-content {
+  position: relative; z-index: 2;
+  padding: 0 72px; max-width: 750px;
+}
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 14px;
+  font-size: 0.52rem; letter-spacing: 0.5em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 22px;
+  animation: riseUp 1s 0.2s ease both;
+}
+.hero-eyebrow::before { content:''; width:40px; height:1px; background:var(--gold); }
+.hero-h1 {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(3rem, 7.5vw, 7rem);
+  font-weight: 900; line-height: 0.95;
+  color: var(--cream);
+  text-shadow: 0 4px 60px rgba(13,9,7,0.8);
+  animation: riseUp 1s 0.4s ease both;
+}
+.hero-h1 em {
+  font-style: normal; color: var(--gold);
+  display: block;
+}
+.hero-desc {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: 1.15rem;
+  color: rgba(241,237,234,0.6); line-height: 1.9;
+  margin-top: 24px; max-width: 480px;
+  animation: riseUp 1s 0.6s ease both;
+}
+.hero-cta-row {
+  display: flex; gap: 14px; margin-top: 38px; flex-wrap: wrap;
+  animation: riseUp 1s 0.8s ease both;
+}
+.btn-primary {
+  font-family: 'Cinzel', serif; font-size: 0.55rem;
+  letter-spacing: 0.3em; text-transform: uppercase;
+  padding: 16px 36px;
+  background: var(--gold); color: var(--dark);
+  border: none; cursor: pointer; transition: all 0.3s;
+  text-decoration: none; display: inline-block;
+}
+.btn-primary:hover { background: var(--cream); transform: translateY(-2px); }
+.btn-ghost {
+  font-family: 'Cinzel', serif; font-size: 0.55rem;
+  letter-spacing: 0.3em; text-transform: uppercase;
+  padding: 15px 36px;
+  background: transparent;
+  border: 1px solid rgba(197,170,152,0.35);
+  color: var(--gold); cursor: pointer; transition: all 0.3s;
+  text-decoration: none; display: inline-block;
+}
+.btn-ghost:hover { border-color: var(--gold); background: rgba(197,170,152,0.08); transform: translateY(-2px); }
+
+/* floating stats */
+.hero-stats {
+  position: absolute; right: 0; top: 50%;
+  transform: translateY(-50%); z-index: 3;
+  display: flex; flex-direction: column;
+  animation: riseUp 1s 1s ease both;
+}
+.hero-stat {
+  padding: 24px 36px;
+  border-left: 1px solid var(--border);
+  border-top: 1px solid rgba(197,170,152,0.08);
+  background: rgba(13,9,7,0.65);
+  backdrop-filter: blur(12px);
+  transition: background 0.3s;
+}
+.hero-stat:hover { background: rgba(197,170,152,0.1); }
+.hero-stat-num {
+  font-family: 'Cinzel', serif;
+  font-size: 1.8rem; color: var(--gold); display: block; line-height: 1;
+}
+.hero-stat-lbl {
+  font-size: 0.45rem; letter-spacing: 0.3em; text-transform: uppercase;
+  color: rgba(241,237,234,0.38); margin-top: 5px; display: block;
+}
+.hero-scroll-indicator {
+  position: absolute; bottom: 36px; left: 72px; z-index: 3;
+  display: flex; align-items: center; gap: 12px;
+  animation: riseUp 1s 1.2s ease both;
+}
+.hero-scroll-indicator span {
+  font-size: 0.45rem; letter-spacing: 0.4em; text-transform: uppercase;
+  color: rgba(241,237,234,0.3);
+}
+.scroll-pulse {
+  width: 50px; height: 1px;
+  background: linear-gradient(to right, var(--gold), transparent);
+  animation: scrollPulse 2.5s ease-in-out infinite;
+}
+@keyframes scrollPulse {
+  0%,100% { opacity:0.4; width:50px; }
+  50%      { opacity:1; width:70px; }
+}
+
+@keyframes riseUp {
+  from { opacity:0; transform:translateY(30px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+/* ── INFO STRIP ── */
+.info-strip {
+  background: var(--deep);
+  display: grid; grid-template-columns: repeat(4,1fr);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.info-cell {
+  padding: 28px 36px;
+  border-right: 1px solid var(--border);
+  transition: background 0.3s;
+}
+.info-cell:last-child { border-right: none; }
+.info-cell:hover { background: rgba(197,170,152,0.04); }
+.info-num {
+  font-family: 'Cinzel', serif;
+  font-size: 2rem; color: var(--gold); line-height: 1;
+}
+.info-lbl {
+  font-size: 0.48rem; letter-spacing: 0.3em; text-transform: uppercase;
+  color: rgba(241,237,234,0.35); margin-top: 5px;
+}
+.info-desc {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: 0.85rem;
+  color: rgba(241,237,234,0.22); margin-top: 4px; line-height: 1.5;
+}
+
+/* ── REVEAL ── */
+.reveal { opacity:0; transform:translateY(28px); transition: opacity 0.9s ease, transform 0.9s ease; }
+.reveal.in { opacity:1; transform:translateY(0); }
+.d1{transition-delay:.1s} .d2{transition-delay:.22s} .d3{transition-delay:.34s}
+.d4{transition-delay:.46s} .d5{transition-delay:.58s} .d6{transition-delay:.7s}
+
+/* ── SECTION HEADER ── */
+.section-header {
+  text-align: center; padding: 90px 72px 60px;
+}
+.eyebrow {
+  display: block; font-size: 0.52rem; letter-spacing: 0.5em;
+  text-transform: uppercase; color: var(--gold); margin-bottom: 14px;
+}
+.section-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  color: var(--cream); line-height: 1;
+}
+.section-orn {
+  display: block; font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem; color: var(--gold); letter-spacing: 0.8em;
+  margin: 16px 0;
+}
+.section-desc {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: 1.05rem;
+  color: rgba(241,237,234,0.5); line-height: 1.9;
+  max-width: 580px; margin: 0 auto;
+}
+
+/* ── EMERGENCY CARDS GRID ── */
+.services-section {
+  background: var(--dark);
+  padding: 0 60px 80px;
+}
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3px;
+  max-width: 1200px; margin: 0 auto;
+}
+
+/* Individual service card */
+.service-card {
+  position: relative; overflow: hidden;
+  min-height: 420px;
+  cursor: pointer;
+  transition: transform 0.4s ease;
+}
+.service-card:hover { transform: scale(1.01); z-index: 10; }
+.sc-img {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  transition: transform 0.8s ease, filter 0.5s ease;
+  filter: brightness(0.45) saturate(0.7);
+}
+.service-card:hover .sc-img {
+  transform: scale(1.07);
+  filter: brightness(0.35) saturate(0.6);
+}
+.sc-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(13,9,7,0.97) 0%,
+    rgba(13,9,7,0.65) 45%,
+    rgba(13,9,7,0.1) 100%
+  );
+  transition: background 0.4s;
+}
+.service-card:hover .sc-overlay {
+  background: linear-gradient(
+    to top,
+    rgba(13,9,7,0.99) 0%,
+    rgba(13,9,7,0.78) 55%,
+    rgba(13,9,7,0.3) 100%
+  );
+}
+.sc-content {
+  position: relative; z-index: 2;
+  padding: 36px 32px;
+  height: 100%;
+  display: flex; flex-direction: column; justify-content: flex-end;
+}
+.sc-number {
+  position: absolute; top: 24px; right: 26px;
+  font-family: 'Cinzel', serif; font-size: 0.6rem;
+  letter-spacing: 0.3em; color: rgba(197,170,152,0.3);
+}
+.sc-icon-wrap {
+  width: 52px; height: 52px;
+  border: 1px solid rgba(197,170,152,0.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem; margin-bottom: 18px;
+  transition: border-color 0.3s, background 0.3s;
+  background: rgba(13,9,7,0.6);
+}
+.service-card:hover .sc-icon-wrap {
+  border-color: var(--gold);
+  background: rgba(197,170,152,0.12);
+}
+.sc-category {
+  font-size: 0.48rem; letter-spacing: 0.35em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 8px;
+}
+.sc-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.6rem; color: var(--cream); line-height: 1.1;
+  margin-bottom: 10px;
+}
+.sc-desc {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: 0.9rem;
+  color: rgba(241,237,234,0.5); line-height: 1.7;
+  margin-bottom: 20px;
+}
+.sc-number-display {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 18px;
+  background: rgba(197,170,152,0.08);
+  border: 1px solid rgba(197,170,152,0.2);
+  transition: all 0.3s;
+}
+.service-card:hover .sc-number-display {
+  background: rgba(197,170,152,0.15);
+  border-color: rgba(197,170,152,0.4);
+}
+.sc-num-icon { font-size: 1rem; }
+.sc-num-text {
+  font-family: 'Cinzel', serif; font-size: 1.1rem;
+  color: var(--gold); letter-spacing: 0.1em;
+}
+.sc-num-label {
+  font-size: 0.44rem; letter-spacing: 0.3em; text-transform: uppercase;
+  color: rgba(241,237,234,0.35); margin-left: auto;
+}
+.sc-response {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 12px;
+}
+.sc-resp-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: #4ade80;
+  animation: pulse-green 2s ease-in-out infinite;
+}
+.sc-resp-text {
+  font-size: 0.47rem; letter-spacing: 0.25em; text-transform: uppercase;
+  color: rgba(241,237,234,0.35);
+}
+
+/* ── LARGE FEATURED SERVICE ── */
+.service-card.featured {
+  grid-column: span 2;
+  min-height: 480px;
+}
+.service-card.featured .sc-title {
+  font-size: 2.2rem;
+}
+
+/* ── HOTLINE BANNER ── */
+.hotline-banner {
+  background: var(--gold);
+  padding: 26px 72px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 20px; flex-wrap: wrap;
+}
+.hotline-left {
+  display: flex; align-items: center; gap: 20px;
+}
+.hotline-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.55rem; letter-spacing: 0.35em; text-transform: uppercase;
+  color: var(--dark); opacity: 0.65;
+}
+.hotline-number {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  color: var(--dark); letter-spacing: 0.05em; font-weight: 900;
+}
+.hotline-divider {
+  width: 1px; height: 40px; background: rgba(13,9,7,0.2);
+}
+.hotline-right {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: 1rem;
+  color: rgba(13,9,7,0.65);
+}
+.hotline-btn {
+  font-family: 'Cinzel', serif; font-size: 0.52rem;
+  letter-spacing: 0.3em; text-transform: uppercase;
+  padding: 14px 28px;
+  background: var(--dark); color: var(--gold);
+  border: none; cursor: pointer; transition: all 0.3s;
+  text-decoration: none; display: inline-block;
+}
+.hotline-btn:hover { background: #0D0907; color: var(--cream); transform: translateY(-2px); }
+
+/* ── HOW IT WORKS ── */
+.how-section {
+  background: var(--deep);
+  padding: 90px 72px;
+}
+.how-grid {
+  display: grid; grid-template-columns: repeat(4,1fr);
+  gap: 2px; max-width: 1100px; margin: 0 auto;
+  margin-top: 48px;
+}
+.how-step {
+  padding: 44px 32px;
+  border: 1px solid var(--border);
+  background: rgba(197,170,152,0.02);
+  transition: background 0.3s, border-color 0.3s;
+  position: relative;
+}
+.how-step:hover {
+  background: rgba(197,170,152,0.06);
+  border-color: rgba(197,170,152,0.3);
+}
+.how-step-num {
+  font-family: 'Cinzel', serif;
+  font-size: 3.5rem; color: rgba(197,170,152,0.08);
+  line-height: 1; position: absolute; top: 16px; right: 22px;
+}
+.how-icon { font-size: 1.8rem; margin-bottom: 20px; display: block; }
+.how-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem; letter-spacing: 0.1em;
+  color: var(--cream); margin-bottom: 10px;
+}
+.how-desc {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: 0.9rem;
+  color: rgba(241,237,234,0.42); line-height: 1.75;
+}
+
+/* ── GALLERY STRIP ── */
+.gallery-strip {
+  background: var(--dark);
+  overflow: hidden; padding: 5px 0;
+}
+.gallery-track {
+  display: flex; gap: 5px;
+  animation: galleryScroll 35s linear infinite;
+  width: max-content;
+}
+.gallery-track:hover { animation-play-state: paused; }
+@keyframes galleryScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.gallery-item {
+  width: 320px; height: 220px;
+  overflow: hidden; flex-shrink: 0; position: relative;
+}
+.gallery-item img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 0.5s, filter 0.4s;
+  filter: brightness(0.7) saturate(0.75);
+}
+.gallery-item:hover img {
+  transform: scale(1.07); filter: brightness(0.9) saturate(1);
+}
+
+/* ── COMMITMENT SECTION ── */
+.commitment-section {
+  background: var(--cream);
+  padding: 90px 72px;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 80px; align-items: center;
+}
+.commit-text .eyebrow { color: var(--gold); }
+.commit-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  color: var(--dark); line-height: 1; margin-bottom: 18px;
+}
+.commit-desc {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: 1.05rem;
+  color: var(--mid); line-height: 1.9;
+  margin-bottom: 32px;
+}
+.commit-features {
+  display: flex; flex-direction: column; gap: 16px;
+}
+.commit-feat {
+  display: flex; gap: 16px; align-items: flex-start;
+  padding: 18px 20px;
+  border: 1px solid rgba(197,170,152,0.35);
+  background: rgba(197,170,152,0.06);
+  transition: background 0.3s;
+}
+.commit-feat:hover { background: rgba(197,170,152,0.12); }
+.commit-feat-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 2px; }
+.commit-feat-title {
+  font-family: 'Cinzel', serif; font-size: 0.75rem;
+  letter-spacing: 0.1em; color: var(--dark); margin-bottom: 4px;
+}
+.commit-feat-desc {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: 0.88rem;
+  color: var(--mid); line-height: 1.6;
+}
+.commit-image {
+  position: relative; overflow: hidden;
+  height: 500px;
+}
+.commit-image img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: sepia(10%) brightness(0.9);
+  transition: transform 0.8s;
+}
+.commit-image:hover img { transform: scale(1.04); }
+.commit-image-badge {
+  position: absolute; bottom: 28px; left: 28px;
+  background: var(--dark); color: var(--gold);
+  padding: 12px 22px;
+  font-family: 'Cinzel', serif; font-size: 0.5rem;
+  letter-spacing: 0.3em; text-transform: uppercase;
+}
+
+/* ── QUOTE ── */
+.quote-section {
+  background: var(--dark);
+  padding: 90px 72px; text-align: center;
+  position: relative; overflow: hidden;
+}
+.quote-bg-text {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  font-family: 'Cinzel', serif;
+  font-size: 18rem; color: rgba(197,170,152,0.02);
+  white-space: nowrap; pointer-events: none; line-height: 1;
+  letter-spacing: -0.05em;
+}
+.quote-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: clamp(1.4rem, 2.8vw, 2.2rem);
+  color: rgba(241,237,234,0.78); line-height: 1.75;
+  max-width: 800px; margin: 0 auto 22px;
+  position: relative; z-index: 1;
+}
+.quote-author {
+  font-size: 0.5rem; letter-spacing: 0.45em; text-transform: uppercase;
+  color: var(--gold); position: relative; z-index: 1;
+}
+
+/* ── FOOTER ── */
+footer {
+  background: var(--deep);
+  padding: 70px 72px 36px;
+  border-top: 1px solid var(--border);
+}
+.footer-top {
+  display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 56px; margin-bottom: 50px;
+}
+.footer-logo {
+  font-family: 'Cinzel', serif;
+  font-size: 1.2rem; letter-spacing: 0.3em;
+  color: var(--cream); display: block; margin-bottom: 14px;
+}
+.footer-tagline {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: 0.92rem;
+  color: rgba(241,237,234,0.3); line-height: 1.9; max-width: 260px;
+}
+.footer-24 {
+  margin-top: 20px; display: flex; align-items: center; gap: 10px;
+}
+.footer-24-num {
+  font-family: 'Cinzel', serif;
+  font-size: 1.8rem; color: var(--gold); line-height: 1;
+}
+.footer-24-lbl {
+  font-size: 0.45rem; letter-spacing: 0.3em; text-transform: uppercase;
+  color: rgba(241,237,234,0.3);
+}
+.fc-title {
+  font-size: 0.48rem; letter-spacing: 0.4em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 22px; display: block;
+}
+.fc ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.fc a {
+  font-family: 'Cormorant Garamond', serif; font-size: 0.95rem;
+  color: rgba(241,237,234,0.35); text-decoration: none; transition: color 0.3s;
+}
+.fc a:hover { color: var(--gold); }
+.footer-bottom {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-top: 28px; border-top: 1px solid rgba(197,170,152,0.08);
+  flex-wrap: wrap; gap: 14px;
+}
+.footer-copy {
+  font-size: 0.46rem; letter-spacing: 0.2em;
+  color: rgba(241,237,234,0.2);
+}
+.footer-soc { display: flex; gap: 22px; }
+.footer-soc a {
+  font-size: 0.46rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(241,237,234,0.25); text-decoration: none; transition: color 0.3s;
+}
+.footer-soc a:hover { color: var(--gold); }
+
+/* ── EMERGENCY MODAL ── */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 9000;
+  background: rgba(13,9,7,0.92);
+  backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.4s;
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal-box {
+  background: var(--deep);
+  border: 1px solid rgba(197,170,152,0.25);
+  padding: 50px;
+  max-width: 500px; width: 90%;
+  transform: translateY(30px) scale(0.96);
+  transition: transform 0.4s;
+  position: relative;
+}
+.modal-overlay.open .modal-box { transform: translateY(0) scale(1); }
+.modal-close {
+  position: absolute; top: 18px; right: 22px;
+  background: none; border: none; cursor: pointer;
+  font-size: 1.2rem; color: rgba(241,237,234,0.4);
+  transition: color 0.3s; line-height: 1;
+}
+.modal-close:hover { color: var(--gold); }
+.modal-eyebrow {
+  font-size: 0.48rem; letter-spacing: 0.4em; text-transform: uppercase;
+  color: var(--gold); display: block; margin-bottom: 14px;
+}
+.modal-title {
+  font-family: 'Cinzel', serif; font-size: 1.8rem;
+  color: var(--cream); margin-bottom: 10px;
+}
+.modal-num {
+  font-family: 'Cinzel', serif; font-size: 3.5rem;
+  color: var(--gold); display: block; margin: 20px 0;
+  letter-spacing: 0.1em;
+}
+.modal-desc {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: 0.95rem;
+  color: rgba(241,237,234,0.5); line-height: 1.8; margin-bottom: 28px;
+}
+.modal-call-btn {
+  display: block; width: 100%; padding: 16px;
+  background: var(--gold); color: var(--dark);
+  font-family: 'Cinzel', serif; font-size: 0.55rem;
+  letter-spacing: 0.3em; text-transform: uppercase;
+  border: none; cursor: pointer; transition: all 0.3s;
+  text-decoration: none; text-align: center;
+}
+.modal-call-btn:hover { background: var(--cream); }
+
+/* ── RESPONSIVE ── */
+@media(max-width:1100px) {
+  nav, nav.scrolled { padding-left:32px; padding-right:32px; }
+  .nav-brand-sub, .nav-status { display:none; }
+  .hero-content { padding:0 32px; }
+  .hero-stats { display:none; }
+  .hero-scroll-indicator { left:32px; }
+  .info-strip { grid-template-columns:1fr 1fr; }
+  .services-section { padding:0 20px 60px; }
+  .services-grid { grid-template-columns:1fr 1fr; }
+  .service-card.featured { grid-column:span 2; }
+  .how-grid { grid-template-columns:1fr 1fr; }
+  .commitment-section { grid-template-columns:1fr; gap:40px; padding:60px 32px; }
+  .commit-image { height:360px; }
+  .how-section { padding:70px 32px; }
+  .quote-section { padding:70px 32px; }
+  .hotline-banner { padding:22px 32px; }
+  .section-header { padding:70px 32px 44px; }
+  .footer-top { grid-template-columns:1fr 1fr; gap:36px; }
+  footer { padding:50px 32px 28px; }
+}
+@media(max-width:640px) {
+  .services-grid { grid-template-columns:1fr; }
+  .service-card.featured { grid-column:span 1; }
+  .info-strip { grid-template-columns:1fr; }
+  .how-grid { grid-template-columns:1fr; }
+  .footer-top { grid-template-columns:1fr; gap:28px; }
+  .hotline-banner { flex-direction:column; text-align:center; }
+  .hotline-left { flex-direction:column; gap:8px; }
+  .hotline-divider { display:none; }
+}
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <a href="#hero" class="nav-brand">
+    <div class="nav-brand-icon">🚨</div>
+    <div>
+      <div class="nav-brand-text">Aurum Response</div>
+      <div class="nav-brand-sub">Luxury Emergency Services</div>
+    </div>
+  </a>
+  <div class="nav-right">
+    <div class="nav-status">
+      <div class="status-dot"></div>
+      All Units Operational
+    </div>
+    <a href="#services" class="nav-emergency-btn">Emergency Lines</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-grid-overlay"></div>
+  <div class="hero-content">
+    <span class="hero-eyebrow">24/7 Priority Response</span>
+    <h1 class="hero-h1">When Every<br><em>Second</em><br>Matters</h1>
+    <p class="hero-desc">Aurum Response delivers premium emergency assistance across fire, medical, security, aquatic, electrical and law enforcement services — available around the clock with unmatched discretion and speed.</p>
+    <div class="hero-cta-row">
+      <a href="#services" class="btn-primary">View All Services</a>
+      <a href="#how" class="btn-ghost">How It Works</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat"><span class="hero-stat-num">7</span><span class="hero-stat-lbl">Emergency Lines</span></div>
+    <div class="hero-stat"><span class="hero-stat-num">24/7</span><span class="hero-stat-lbl">Always Active</span></div>
+    <div class="hero-stat"><span class="hero-stat-num">&lt;4m</span><span class="hero-stat-lbl">Avg Response</span></div>
+    <div class="hero-stat"><span class="hero-stat-num">100%</span><span class="hero-stat-lbl">Confidential</span></div>
+  </div>
+  <div class="hero-scroll-indicator">
+    <span>Scroll</span>
+    <div class="scroll-pulse"></div>
+  </div>
+</section>
+
+<!-- INFO STRIP -->
+<div class="info-strip">
+  <div class="info-cell reveal"><span class="info-num">7</span><span class="info-lbl">Specialist Lines</span><p class="info-desc">Fire · Medical · Security · Pool · Electric · Police</p></div>
+  <div class="info-cell reveal d1"><span class="info-num">4min</span><span class="info-lbl">Response Time</span><p class="info-desc">Average on-site arrival for priority calls</p></div>
+  <div class="info-cell reveal d2"><span class="info-num">365</span><span class="info-lbl">Days a Year</span><p class="info-desc">Never closed — not holidays, not storms</p></div>
+  <div class="info-cell reveal d3"><span class="info-num">∞</span><span class="info-lbl">Commitment</span><p class="info-desc">Unwavering dedication to your safety</p></div>
+</div>
+
+<!-- SECTION HEADER -->
+<div class="section-header reveal" id="services">
+  <span class="eyebrow">Emergency Helplines</span>
+  <h2 class="section-title">Our Services</h2>
+  <span class="section-orn">— — —</span>
+  <p class="section-desc">Seven dedicated emergency lines, each staffed by elite specialists. A single call connects you instantly to the professionals trained for your exact situation.</p>
+</div>
+
+<!-- EMERGENCY SERVICES GRID -->
+<div class="services-section">
+  <div class="services-grid">
+
+    <!-- 1. FIRE EMERGENCY — FEATURED -->
+    <div class="service-card featured reveal" onclick="openModal('fire')">
+      <div class="sc-img" style="background-image:url('https://images.unsplash.com/photo-1625657799852-e1b44f0a9e97?w=1200&q=85')"></div>
+      <div class="sc-overlay"></div>
+      <div class="sc-content">
+        <span class="sc-number">01</span>
+        <div class="sc-icon-wrap">🔥</div>
+        <span class="sc-category">Fire Emergency</span>
+        <h3 class="sc-title">Fire &<br>Rescue</h3>
+        <p class="sc-desc">Elite fire suppression and rescue teams on standby. From residential blazes to structural infernos, our rapid-response units arrive equipped for every scenario.</p>
+        <div class="sc-number-display">
+          <span class="sc-num-icon">📞</span>
+          <span class="sc-num-text">101</span>
+          <span class="sc-num-label">Call Now</span>
+        </div>
+        <div class="sc-response">
+          <div class="sc-resp-dot"></div>
+          <span class="sc-resp-text">Units Active · Average Response: 3 min</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. MEDICAL EMERGENCY -->
+    <div class="service-card reveal d1" onclick="openModal('medical')">
+      <div class="sc-img" style="background-image:url('https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=900&q=85')"></div>
+      <div class="sc-overlay"></div>
+      <div class="sc-content">
+        <span class="sc-number">02</span>
+        <div class="sc-icon-wrap">🚑</div>
+        <span class="sc-category">Medical Emergency</span>
+        <h3 class="sc-title">Medical &<br>Paramedic</h3>
+        <p class="sc-desc">Advanced life support and emergency medical care delivered by certified paramedics and physicians with full equipment.</p>
+        <div class="sc-number-display">
+          <span class="sc-num-icon">📞</span>
+          <span class="sc-num-text">102</span>
+          <span class="sc-num-label">Call Now</span>
+        </div>
+        <div class="sc-response">
+          <div class="sc-resp-dot"></div>
+          <span class="sc-resp-text">24/7 Medics · Response: 4 min</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. SECURITY EMERGENCY -->
+    <div class="service-card reveal d2" onclick="openModal('security')">
+      <div class="sc-img" style="background-image:url('https://images.unsplash.com/photo-1550850839-8dc894ed385a?w=900&q=85')"></div>
+      <div class="sc-overlay"></div>
+      <div class="sc-content">
+        <span class="sc-number">03</span>
+        <div class="sc-icon-wrap">🛡️</div>
+        <span class="sc-category">Security Emergency</span>
+        <h3 class="sc-title">Security &<br>Protection</h3>
+        <p class="sc-desc">Rapid deployment of armed and unarmed security professionals. Intrusions, threats and safety incidents resolved with precision and discretion.</p>
+        <div class="sc-number-display">
+          <span class="sc-num-icon">📞</span>
+          <span class="sc-num-text">103</span>
+          <span class="sc-num-label">Call Now</span>
+        </div>
+        <div class="sc-response">
+          <div class="sc-resp-dot"></div>
+          <span class="sc-resp-text">Armed Units Ready · Response: 5 min</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. POOL EMERGENCY — FEATURED -->
+    <div class="service-card featured reveal d1" onclick="openModal('pool')">
+      <div class="sc-img" style="background-image:url('https://images.unsplash.com/photo-1575429198097-0414ec08e8cd?w=1200&q=85')"></div>
+      <div class="sc-overlay"></div>
+      <div class="sc-content">
+        <span class="sc-number">04</span>
+        <div class="sc-icon-wrap">🏊</div>
+        <span class="sc-category">Pool Emergency</span>
+        <h3 class="sc-title">Aquatic &<br>Pool Rescue</h3>
+        <p class="sc-desc">Certified aquatic rescue specialists trained for pool, spa and water feature emergencies. Immediate response for drowning, chemical exposure, and aquatic accidents at private estates and luxury facilities.</p>
+        <div class="sc-number-display">
+          <span class="sc-num-icon">📞</span>
+          <span class="sc-num-text">104</span>
+          <span class="sc-num-label">Call Now</span>
+        </div>
+        <div class="sc-response">
+          <div class="sc-resp-dot"></div>
+          <span class="sc-resp-text">Aquatic Rescue · Response: 3 min</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. ELECTRICITY EMERGENCY -->
+    <div class="service-card reveal d2" onclick="openModal('electricity')">
+      <div class="sc-img" style="background-image:url('https://images.unsplash.com/photo-1621905251918-48416bd8575a?w=900&q=85')"></div>
+      <div class="sc-overlay"></div>
+      <div class="sc-content">
+        <span class="sc-number">05</span>
+        <div class="sc-icon-wrap">⚡</div>
+        <span class="sc-category">Electricity Emergency</span>
+        <h3 class="sc-title">Electrical &<br>Power Crisis</h3>
+        <p class="sc-desc">Master electricians and utility specialists for live wire hazards, outages, electrical fires and high-voltage incidents. Safety-first, expert resolution.</p>
+        <div class="sc-number-display">
+          <span class="sc-num-icon">📞</span>
+          <span class="sc-num-text">105</span>
+          <span class="sc-num-label">Call Now</span>
+        </div>
+        <div class="sc-response">
+          <div class="sc-resp-dot"></div>
+          <span class="sc-resp-text">Certified Electricians · Response: 6 min</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. POLICE EMERGENCY -->
+    <div class="service-card reveal d3" onclick="openModal('police')">
+      <div class="sc-img" style="background-image:url('https://images.unsplash.com/photo-1486693128850-a77436e7ba3c?w=900&q=85')"></div>
+      <div class="sc-overlay"></div>
+      <div class="sc-content">
+        <span class="sc-number">06</span>
+        <div class="sc-icon-wrap">👮</div>
+        <span class="sc-category">Police Emergency</span>
+        <h3 class="sc-title">Police &<br>Law Enforcement</h3>
+        <p class="sc-desc">Direct priority dispatch to law enforcement. Crimes in progress, disturbances, missing persons and safety threats receive immediate police response.</p>
+        <div class="sc-number-display">
+          <span class="sc-num-icon">📞</span>
+          <span class="sc-num-text">100</span>
+          <span class="sc-num-label">Call Now</span>
+        </div>
+        <div class="sc-response">
+          <div class="sc-resp-dot"></div>
+          <span class="sc-resp-text">Priority Dispatch · Response: 4 min</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. GENERAL EMERGENCY -->
+    <div class="service-card reveal d4" onclick="openModal('general')">
+      <div class="sc-img" style="background-image:url('https://images.unsplash.com/photo-1518895312237-a9e23508077d?w=900&q=85')"></div>
+      <div class="sc-overlay"></div>
+      <div class="sc-content">
+        <span class="sc-number">07</span>
+        <div class="sc-icon-wrap">📱</div>
+        <span class="sc-category">Central Dispatch</span>
+        <h3 class="sc-title">General<br>Emergency</h3>
+        <p class="sc-desc">Unsure which service you need? Our central dispatch operators assess your situation and simultaneously alert all relevant emergency services.</p>
+        <div class="sc-number-display">
+          <span class="sc-num-icon">📞</span>
+          <span class="sc-num-text">112</span>
+          <span class="sc-num-label">Universal Emergency</span>
+        </div>
+        <div class="sc-response">
+          <div class="sc-resp-dot"></div>
+          <span class="sc-resp-text">All Services · Immediate Dispatch</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- HOTLINE BANNER -->
+<div class="hotline-banner reveal">
+  <div class="hotline-left">
+    <div>
+      <div class="hotline-label">Universal Emergency Number</div>
+      <div class="hotline-number">112 — Central Dispatch</div>
+    </div>
+    <div class="hotline-divider"></div>
+    <div class="hotline-right">One call routes you to every service instantly</div>
+  </div>
+  <a href="tel:112" class="hotline-btn">Call 112 Now</a>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="how-section" id="how">
+  <div class="section-header reveal" style="padding:0 0 0;">
+    <span class="eyebrow">Protocol</span>
+    <h2 class="section-title">How It Works</h2>
+    <span class="section-orn">— — —</span>
+    <p class="section-desc">From the moment you dial, our precision response system ensures the right team reaches you in the shortest possible time.</p>
+  </div>
+  <div class="how-grid">
+    <div class="how-step reveal d1">
+      <span class="how-step-num">01</span>
+      <span class="how-icon">📞</span>
+      <div class="how-title">You Call</div>
+      <p class="how-desc">Dial the dedicated line for your emergency type, or 112 for central dispatch. A specialist answers within seconds.</p>
+    </div>
+    <div class="how-step reveal d2">
+      <span class="how-step-num">02</span>
+      <span class="how-icon">🎯</span>
+      <div class="how-title">Assessed</div>
+      <p class="how-desc">Our trained dispatcher assesses your situation, confirms your location, and determines the optimal response team.</p>
+    </div>
+    <div class="how-step reveal d3">
+      <span class="how-step-num">03</span>
+      <span class="how-icon">🚁</span>
+      <div class="how-title">Dispatched</div>
+      <p class="how-desc">The nearest qualified unit is immediately deployed. You receive live updates on arrival time via SMS.</p>
+    </div>
+    <div class="how-step reveal d4">
+      <span class="how-step-num">04</span>
+      <span class="how-icon">✅</span>
+      <div class="how-title">Resolved</div>
+      <p class="how-desc">Elite professionals arrive, secure the scene and resolve the emergency. A full incident report is delivered to you.</p>
+    </div>
+  </div>
+</div>
+
+<!-- GALLERY STRIP -->
+<div class="gallery-strip">
+  <div class="gallery-track">
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1625657799852-e1b44f0a9e97?w=640&q=75" alt="Fire"/></div>
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=640&q=75" alt="Medical"/></div>
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1575429198097-0414ec08e8cd?w=640&q=75" alt="Pool"/></div>
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1621905251918-48416bd8575a?w=640&q=75" alt="Electric"/></div>
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1486693128850-a77436e7ba3c?w=640&q=75" alt="Police"/></div>
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1550850839-8dc894ed385a?w=640&q=75" alt="Security"/></div>
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1518895312237-a9e23508077d?w=640&q=75" alt="Dispatch"/></div>
+    <!-- duplicate for seamless loop -->
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1625657799852-e1b44f0a9e97?w=640&q=75" alt="Fire"/></div>
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=640&q=75" alt="Medical"/></div>
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1575429198097-0414ec08e8cd?w=640&q=75" alt="Pool"/></div>
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1621905251918-48416bd8575a?w=640&q=75" alt="Electric"/></div>
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1486693128850-a77436e7ba3c?w=640&q=75" alt="Police"/></div>
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1550850839-8dc894ed385a?w=640&q=75" alt="Security"/></div>
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1518895312237-a9e23508077d?w=640&q=75" alt="Dispatch"/></div>
+  </div>
+</div>
+
+<!-- COMMITMENT SECTION -->
+<div class="commitment-section">
+  <div class="commit-text reveal">
+    <span class="eyebrow">Our Promise</span>
+    <h2 class="commit-title">Excellence in<br>Every Crisis</h2>
+    <p class="commit-desc">Aurum Response was founded on the principle that emergency services should match the standard of every other luxury service at your disposal — swift, professional, discreet and complete.</p>
+    <div class="commit-features">
+      <div class="commit-feat">
+        <span class="commit-feat-icon">🏅</span>
+        <div>
+          <div class="commit-feat-title">Elite Trained Specialists</div>
+          <p class="commit-feat-desc">Every responder holds elite certifications and undergoes quarterly training in their specialisation.</p>
+        </div>
+      </div>
+      <div class="commit-feat">
+        <span class="commit-feat-icon">🔒</span>
+        <div>
+          <div class="commit-feat-title">Complete Discretion</div>
+          <p class="commit-feat-desc">All incidents handled with absolute confidentiality. Your privacy is treated as a priority alongside your safety.</p>
+        </div>
+      </div>
+      <div class="commit-feat">
+        <span class="commit-feat-icon">📡</span>
+        <div>
+          <div class="commit-feat-title">Real-Time Coordination</div>
+          <p class="commit-feat-desc">Proprietary dispatch technology links all seven services for seamless multi-team response when required.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="commit-image reveal d2">
+    <img src="https://images.unsplash.com/photo-1544027993-37dbfe43562a?w=900&q=85" alt="Emergency Response Team"/>
+    <div class="commit-image-badge">Aurum Response · Est. 2005</div>
+  </div>
+</div>
+
+<!-- QUOTE -->
+<div class="quote-section reveal">
+  <div class="quote-bg-text">SOS</div>
+  <p class="quote-text">"In the moment of crisis, the luxury is not in the surroundings — it is in knowing that the finest professionals in the world are already on their way to you."</p>
+  <span class="quote-author">— Aurum Response · Director of Operations</span>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <span class="footer-logo">AURUM RESPONSE</span>
+      <p class="footer-tagline">The premier luxury emergency response service. Available every hour of every day, for every emergency, without exception.</p>
+      <div class="footer-24">
+        <span class="footer-24-num">24/7</span>
+        <span class="footer-24-lbl">Always<br>Available</span>
+      </div>
+    </div>
+    <div class="fc">
+      <span class="fc-title">Emergency Lines</span>
+      <ul>
+        <li><a href="tel:101">🔥 Fire — 101</a></li>
+        <li><a href="tel:102">🚑 Medical — 102</a></li>
+        <li><a href="tel:103">🛡️ Security — 103</a></li>
+        <li><a href="tel:104">🏊 Pool — 104</a></li>
+        <li><a href="tel:105">⚡ Electricity — 105</a></li>
+        <li><a href="tel:100">👮 Police — 100</a></li>
+        <li><a href="tel:112">📱 Central — 112</a></li>
+      </ul>
+    </div>
+    <div class="fc">
+      <span class="fc-title">Services</span>
+      <ul>
+        <li><a href="#">Fire Suppression</a></li>
+        <li><a href="#">Emergency Medical</a></li>
+        <li><a href="#">Armed Security</a></li>
+        <li><a href="#">Aquatic Rescue</a></li>
+        <li><a href="#">Power Emergency</a></li>
+        <li><a href="#">Police Dispatch</a></li>
+      </ul>
+    </div>
+    <div class="fc">
+      <span class="fc-title">Organisation</span>
+      <ul>
+        <li><a href="#">About Aurum</a></li>
+        <li><a href="#">Our Specialists</a></li>
+        <li><a href="#">Training Standards</a></li>
+        <li><a href="#">Partnerships</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2024 Aurum Response · All Rights Reserved · Luxury Emergency Services · Est. 2005</p>
+    <div class="footer-soc">
+      <a href="#">Response Portal</a>
+      <a href="#">Media</a>
+      <a href="#">Privacy</a>
+    </div>
+  </div>
+</footer>
+
+<!-- EMERGENCY MODAL -->
+<div class="modal-overlay" id="modal" onclick="closeModalOuter(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <span class="modal-eyebrow" id="modal-cat"></span>
+    <h3 class="modal-title" id="modal-title"></h3>
+    <span class="modal-num" id="modal-num"></span>
+    <p class="modal-desc" id="modal-desc"></p>
+    <a id="modal-call-btn" class="modal-call-btn" href="#">📞 Call Now</a>
+  </div>
+</div>
+
+<script>
+/* ── CURSOR ── */
+const dot  = document.getElementById('cursor-dot');
+const ring = document.getElementById('cursor-ring');
+let rx=0, ry=0;
+document.addEventListener('mousemove', e=>{
+  dot.style.left  = e.clientX+'px';
+  dot.style.top   = e.clientY+'px';
+});
+(function animate(){
+  rx += (parseFloat(dot.style.left||0) - rx) * 0.13;
+  ry += (parseFloat(dot.style.top||0)  - ry) * 0.13;
+  ring.style.left = rx+'px';
+  ring.style.top  = ry+'px';
+  requestAnimationFrame(animate);
+})();
+
+/* ── STICKY NAV ── */
+const nav = document.getElementById('mainNav');
+window.addEventListener('scroll', ()=>{
+  nav.classList.toggle('scrolled', window.scrollY > 60);
+});
+
+/* ── SCROLL REVEAL ── */
+const obs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){ e.target.classList.add('in'); obs.unobserve(e.target); }
+  });
+}, { threshold: 0.07 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+/* ── EMERGENCY MODAL DATA ── */
+const modalData = {
+  fire: {
+    cat: 'Fire Emergency',
+    title: 'Fire & Rescue',
+    num: '101',
+    desc: 'Elite fire suppression units equipped with advanced apparatus. Trained for residential, commercial and structural fires. Rescue operations, hazardous material containment and post-fire assessment all included.'
+  },
+  medical: {
+    cat: 'Medical Emergency',
+    title: 'Medical & Paramedic',
+    num: '102',
+    desc: 'Advanced Life Support paramedics and emergency physicians available around the clock. Cardiac events, trauma, stroke, respiratory emergencies and critical care transport — all handled with clinical excellence.'
+  },
+  security: {
+    cat: 'Security Emergency',
+    title: 'Security & Protection',
+    num: '103',
+    desc: 'Rapid deployment of licensed security professionals for intrusions, armed threats, personal safety incidents and property breaches. Handled with absolute discretion and professionalism.'
+  },
+  pool: {
+    cat: 'Pool Emergency',
+    title: 'Aquatic & Pool Rescue',
+    num: '104',
+    desc: 'Certified aquatic emergency specialists for drowning incidents, pool chemical hazards, spa emergencies and water feature accidents at private residences, hotels and luxury estates. Immediate rescue and medical support.'
+  },
+  electricity: {
+    cat: 'Electricity Emergency',
+    title: 'Electrical & Power Crisis',
+    num: '105',
+    desc: 'Master electricians and power safety specialists for live wire hazards, electrical fires, total power outages, equipment failures and high-voltage incidents. Certified and insured for all residential and commercial scenarios.'
+  },
+  police: {
+    cat: 'Police Emergency',
+    title: 'Police & Law Enforcement',
+    num: '100',
+    desc: 'Priority direct dispatch to law enforcement. Crimes in progress, break-ins, threats, missing persons, vehicle incidents and all matters requiring police authority. Immediate coordinated response guaranteed.'
+  },
+  general: {
+    cat: 'Central Dispatch',
+    title: 'General Emergency',
+    num: '112',
+    desc: 'Our universal emergency number connects you to a central dispatcher who simultaneously alerts all relevant services. The fastest way to ensure the right help arrives when you are unsure of the exact service needed.'
+  }
+};
+
+function openModal(type){
+  const d = modalData[type];
+  if(!d) return;
+  document.getElementById('modal-cat').textContent = d.cat;
+  document.getElementById('modal-title').textContent = d.title;
+  document.getElementById('modal-num').textContent = d.num;
+  document.getElementById('modal-desc').textContent = d.desc;
+  const btn = document.getElementById('modal-call-btn');
+  btn.textContent = `📞 Call ${d.num} Now`;
+  btn.href = `tel:${d.num}`;
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(){
+  document.getElementById('modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function closeModalOuter(e){
+  if(e.target === document.getElementById('modal')) closeModal();
+}
+
+document.addEventListener('keydown', e=>{
+  if(e.key === 'Escape') closeModal();
+});
+</script>
+</body>
+</html>

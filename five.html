@@ -1,0 +1,1679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Maison Dorée — Luxury Reservations</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@200;300;400;500;600&display=swap" rel="stylesheet"/>
+
+<style>
+/* ═══════════════════════════════════════════
+   ROOT & RESET
+═══════════════════════════════════════════ */
+:root {
+  --gold:      #C5AA98;
+  --cream:     #F1EDEA;
+  --dark:      #0E0A07;
+  --deep:      #181008;
+  --panel:     #1C1510;
+  --mid:       #8B6E5A;
+  --soft:      #E8DDD7;
+  --light-gold:#D4BFB0;
+  --border:    rgba(197,170,152,0.18);
+  --border-h:  rgba(197,170,152,0.42);
+}
+
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+
+body {
+  font-family:'Jost',sans-serif;
+  background:var(--dark);
+  color:var(--cream);
+  overflow-x:hidden;
+  cursor:none;
+}
+
+::-webkit-scrollbar { width:4px; }
+::-webkit-scrollbar-track { background:var(--dark); }
+::-webkit-scrollbar-thumb { background:var(--gold); border-radius:2px; }
+
+/* ── CURSOR ── */
+#cdot {
+  width:7px; height:7px; background:var(--gold);
+  border-radius:50%; position:fixed; z-index:99999;
+  pointer-events:none; transform:translate(-50%,-50%);
+}
+#cring {
+  width:30px; height:30px;
+  border:1px solid rgba(197,170,152,0.5);
+  border-radius:50%; position:fixed; z-index:99998;
+  pointer-events:none; transform:translate(-50%,-50%);
+  transition:width .2s,height .2s;
+}
+
+/* ── GRAIN OVERLAY ── */
+body::after {
+  content:''; position:fixed; inset:0; pointer-events:none; z-index:9997; opacity:0.45;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+}
+
+/* ═══════════════════════════════════════════
+   NAV
+═══════════════════════════════════════════ */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:1000;
+  display:flex; justify-content:space-between; align-items:center;
+  padding:30px 80px;
+  transition:all .5s ease;
+}
+nav.scrolled {
+  background:rgba(14,10,7,0.96);
+  backdrop-filter:blur(20px);
+  padding:18px 80px;
+  border-bottom:1px solid var(--border);
+}
+.nav-logo {
+  font-family:'Playfair Display',serif;
+  font-size:1.5rem; color:var(--cream);
+  text-decoration:none; letter-spacing:0.06em;
+}
+.nav-logo span { color:var(--gold); font-style:italic; }
+.nav-links { display:flex; gap:36px; list-style:none; align-items:center; }
+.nav-links a {
+  font-size:0.55rem; letter-spacing:0.3em; text-transform:uppercase;
+  color:rgba(241,237,234,0.5); text-decoration:none; transition:color .3s;
+}
+.nav-links a:hover { color:var(--gold); }
+.nav-cta {
+  font-family:'Jost',sans-serif; font-size:0.53rem;
+  letter-spacing:0.3em; text-transform:uppercase;
+  padding:12px 28px; background:var(--gold); color:var(--dark);
+  border:none; cursor:pointer; transition:all .3s; text-decoration:none;
+  display:inline-block;
+}
+.nav-cta:hover { background:var(--cream); transform:translateY(-1px); }
+
+/* ═══════════════════════════════════════════
+   HERO
+═══════════════════════════════════════════ */
+#hero {
+  position:relative; height:100vh; min-height:720px;
+  display:flex; align-items:flex-end; overflow:hidden;
+}
+.hero-bg {
+  position:absolute; inset:0;
+  background:url('https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=1920&q=85') center/cover;
+  animation:heroZoom 24s ease-in-out infinite alternate;
+}
+@keyframes heroZoom {
+  from { transform:scale(1); }
+  to   { transform:scale(1.07); }
+}
+.hero-overlay {
+  position:absolute; inset:0;
+  background:
+    linear-gradient(to top, rgba(14,10,7,1) 0%, rgba(14,10,7,0.6) 40%, rgba(14,10,7,0.15) 100%),
+    linear-gradient(to right, rgba(14,10,7,0.5) 0%, transparent 60%);
+}
+.hero-grid {
+  position:absolute; inset:0; pointer-events:none;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size:100px 100px;
+}
+
+.hero-content {
+  position:relative; z-index:2;
+  padding:0 80px 80px; width:100%;
+  display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:end;
+}
+.hero-left { max-width:600px; }
+.hero-eyebrow {
+  display:inline-flex; align-items:center; gap:14px;
+  font-size:0.5rem; letter-spacing:0.55em; text-transform:uppercase;
+  color:var(--gold); margin-bottom:20px;
+  animation:riseUp 1s 0.2s ease both;
+}
+.hero-eyebrow::before { content:''; width:40px; height:1px; background:var(--gold); }
+.hero-h1 {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(3.2rem,7vw,6.5rem); line-height:1;
+  color:var(--cream); font-weight:400;
+  animation:riseUp 1s 0.4s ease both;
+}
+.hero-h1 em { display:block; color:var(--gold); font-style:italic; }
+.hero-sub {
+  font-family:'Cormorant Garamond',serif; font-style:italic;
+  font-size:1.1rem; color:rgba(241,237,234,0.58);
+  line-height:1.9; margin-top:20px; max-width:460px;
+  animation:riseUp 1s 0.6s ease both;
+}
+.hero-pills {
+  display:flex; gap:10px; margin-top:28px; flex-wrap:wrap;
+  animation:riseUp 1s 0.8s ease both;
+}
+.hero-pill {
+  display:flex; align-items:center; gap:8px;
+  padding:9px 18px;
+  background:rgba(197,170,152,0.1);
+  border:1px solid rgba(197,170,152,0.22);
+  font-size:0.5rem; letter-spacing:0.2em; text-transform:uppercase;
+  color:var(--cream); transition:all .3s;
+}
+.hero-pill:hover { background:rgba(197,170,152,0.2); border-color:var(--gold); }
+
+/* QUICK BOOKING PANEL */
+.hero-booking {
+  animation:riseUp 1s 0.6s ease both;
+}
+.booking-panel {
+  background:rgba(24,16,8,0.92);
+  backdrop-filter:blur(20px);
+  border:1px solid var(--border);
+  padding:36px;
+}
+.booking-panel-title {
+  font-family:'Playfair Display',serif;
+  font-size:1.2rem; color:var(--cream);
+  margin-bottom:6px; font-weight:400;
+}
+.booking-panel-sub {
+  font-family:'Cormorant Garamond',serif; font-style:italic;
+  font-size:0.85rem; color:var(--gold); margin-bottom:26px;
+}
+.booking-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px; }
+.booking-field { display:flex; flex-direction:column; gap:6px; }
+.booking-field label {
+  font-size:0.46rem; letter-spacing:0.35em; text-transform:uppercase;
+  color:rgba(241,237,234,0.4);
+}
+.booking-field input,
+.booking-field select {
+  background:rgba(197,170,152,0.07);
+  border:1px solid var(--border);
+  color:var(--cream); padding:12px 14px;
+  font-family:'Cormorant Garamond',serif; font-size:1rem;
+  outline:none; transition:border-color .3s; appearance:none;
+  -webkit-appearance:none;
+}
+.booking-field input::-webkit-calendar-picker-indicator {
+  filter:invert(0.7) sepia(1) saturate(0.5) hue-rotate(0deg);
+  cursor:pointer;
+}
+.booking-field input:focus,
+.booking-field select:focus { border-color:var(--gold); background:rgba(197,170,152,0.12); }
+.booking-field input[type="date"] { cursor:pointer; }
+.booking-guests { margin-bottom:18px; }
+.btn-book {
+  width:100%; padding:15px;
+  background:var(--gold); color:var(--dark);
+  border:none; cursor:pointer;
+  font-family:'Jost',sans-serif; font-size:0.55rem;
+  letter-spacing:0.35em; text-transform:uppercase; font-weight:600;
+  transition:all .3s;
+}
+.btn-book:hover { background:var(--cream); transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,0.3); }
+.booking-note {
+  text-align:center; margin-top:12px;
+  font-family:'Cormorant Garamond',serif; font-style:italic;
+  font-size:0.82rem; color:rgba(241,237,234,0.3);
+}
+
+@keyframes riseUp {
+  from { opacity:0; transform:translateY(32px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+/* ═══════════════════════════════════════════
+   INFO STRIP
+═══════════════════════════════════════════ */
+.strip {
+  background:var(--deep);
+  display:grid; grid-template-columns:repeat(4,1fr);
+  border-top:1px solid var(--border); border-bottom:1px solid var(--border);
+}
+.strip-cell {
+  padding:28px 36px;
+  border-right:1px solid var(--border);
+  transition:background .3s;
+}
+.strip-cell:last-child { border-right:none; }
+.strip-cell:hover { background:rgba(197,170,152,0.04); }
+.strip-num {
+  font-family:'Playfair Display',serif;
+  font-size:2.2rem; color:var(--gold); line-height:1;
+}
+.strip-lbl {
+  font-size:0.46rem; letter-spacing:0.3em; text-transform:uppercase;
+  color:rgba(241,237,234,0.35); margin-top:4px;
+}
+.strip-desc {
+  font-family:'Cormorant Garamond',serif; font-style:italic;
+  font-size:0.85rem; color:rgba(241,237,234,0.22); margin-top:4px; line-height:1.5;
+}
+
+/* ═══════════════════════════════════════════
+   SHARED
+═══════════════════════════════════════════ */
+.reveal { opacity:0; transform:translateY(28px); transition:opacity .9s ease, transform .9s ease; }
+.reveal.in { opacity:1; transform:translateY(0); }
+.d1{transition-delay:.1s} .d2{transition-delay:.22s} .d3{transition-delay:.34s}
+.d4{transition-delay:.46s} .d5{transition-delay:.58s} .d6{transition-delay:.7s}
+
+.eyebrow {
+  display:block; font-size:0.5rem; letter-spacing:0.5em;
+  text-transform:uppercase; color:var(--gold); margin-bottom:12px;
+}
+.sec-title {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2.5rem,5vw,4.2rem); line-height:1; font-weight:400;
+}
+.sec-orn {
+  display:block; font-family:'Cormorant Garamond',serif;
+  font-size:1rem; color:var(--gold); letter-spacing:0.8em; margin:14px 0;
+}
+.sec-body {
+  font-family:'Cormorant Garamond',serif; font-style:italic;
+  font-size:1.05rem; color:rgba(241,237,234,0.52); line-height:1.9;
+}
+.sec-header { text-align:center; padding:88px 80px 60px; }
+.sec-header .sec-body { max-width:580px; margin:0 auto; }
+
+/* ═══════════════════════════════════════════
+   ROOMS SECTION
+═══════════════════════════════════════════ */
+.rooms-section {
+  background:var(--dark);
+  padding:0 60px 80px;
+}
+.rooms-grid {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:3px; max-width:1280px; margin:0 auto;
+}
+.room-card {
+  position:relative; overflow:hidden; cursor:pointer;
+  min-height:480px;
+  transition:transform .4s ease;
+}
+.room-card:hover { z-index:5; transform:scale(1.01); }
+.room-card.featured { grid-column:span 2; min-height:560px; }
+.rc-img {
+  position:absolute; inset:0;
+  background-size:cover; background-position:center;
+  transition:transform .8s ease, filter .5s ease;
+  filter:brightness(0.5) saturate(0.75);
+}
+.room-card:hover .rc-img { transform:scale(1.07); filter:brightness(0.4); }
+.rc-overlay {
+  position:absolute; inset:0;
+  background:linear-gradient(to top, rgba(14,10,7,0.97) 0%, rgba(14,10,7,0.55) 45%, transparent 100%);
+  transition:background .4s;
+}
+.room-card:hover .rc-overlay {
+  background:linear-gradient(to top, rgba(14,10,7,0.99) 0%, rgba(14,10,7,0.75) 55%, rgba(14,10,7,0.2) 100%);
+}
+.rc-content {
+  position:relative; z-index:2;
+  padding:32px 28px; height:100%;
+  display:flex; flex-direction:column; justify-content:flex-end;
+}
+.rc-badge {
+  position:absolute; top:22px; right:22px;
+  background:var(--gold); color:var(--dark);
+  padding:5px 14px;
+  font-size:0.44rem; letter-spacing:0.3em; text-transform:uppercase; font-weight:600;
+}
+.rc-tag {
+  font-size:0.46rem; letter-spacing:0.35em; text-transform:uppercase;
+  color:var(--gold); margin-bottom:8px;
+}
+.rc-title {
+  font-family:'Playfair Display',serif;
+  font-size:1.7rem; color:var(--cream); margin-bottom:8px; font-weight:400;
+}
+.room-card.featured .rc-title { font-size:2.4rem; }
+.rc-desc {
+  font-family:'Cormorant Garamond',serif; font-style:italic;
+  font-size:0.88rem; color:rgba(241,237,234,0.5); line-height:1.7; margin-bottom:20px;
+}
+.rc-footer {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:14px 18px;
+  background:rgba(197,170,152,0.08);
+  border:1px solid rgba(197,170,152,0.18);
+  transition:all .3s;
+}
+.room-card:hover .rc-footer { background:rgba(197,170,152,0.16); border-color:rgba(197,170,152,0.38); }
+.rc-price {
+  font-family:'Playfair Display',serif;
+  font-size:1.3rem; color:var(--gold);
+}
+.rc-price span { font-size:0.7rem; color:rgba(241,237,234,0.35); font-family:'Jost',sans-serif; }
+.rc-btn {
+  font-size:0.46rem; letter-spacing:0.3em; text-transform:uppercase;
+  color:var(--cream); background:none; border:1px solid var(--border);
+  padding:9px 18px; cursor:pointer; transition:all .3s; font-family:'Jost',sans-serif;
+}
+.rc-btn:hover { background:var(--gold); color:var(--dark); border-color:var(--gold); }
+
+/* ═══════════════════════════════════════════
+   RESERVATION FORM SECTION
+═══════════════════════════════════════════ */
+.reservation-section {
+  background:var(--cream);
+  padding:90px 80px;
+}
+.reservation-inner {
+  max-width:1200px; margin:0 auto;
+  display:grid; grid-template-columns:1fr 1.1fr; gap:72px; align-items:start;
+}
+.res-text .sec-title { color:var(--dark); }
+.res-text .eyebrow { color:var(--gold); }
+.res-text .sec-body { color:var(--mid); margin-top:14px; }
+.res-img-stack {
+  display:grid; grid-template-columns:1fr 1fr; gap:4px; margin-top:32px;
+}
+.res-img-cell { height:180px; overflow:hidden; position:relative; }
+.res-img-cell img { width:100%; height:100%; object-fit:cover; transition:transform .7s; filter:brightness(0.88); }
+.res-img-cell:hover img { transform:scale(1.06); filter:brightness(1); }
+.res-img-cell:first-child { grid-column:span 2; height:250px; }
+
+.res-form-wrap {
+  background:var(--dark);
+  padding:44px;
+}
+.res-form-title {
+  font-family:'Playfair Display',serif;
+  font-size:1.6rem; color:var(--cream); font-weight:400; margin-bottom:6px;
+}
+.res-form-sub {
+  font-family:'Cormorant Garamond',serif; font-style:italic;
+  font-size:0.9rem; color:var(--gold); margin-bottom:30px;
+}
+.form-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.form-field { display:flex; flex-direction:column; gap:6px; }
+.form-field.full { grid-column:span 2; }
+.form-field label {
+  font-size:0.46rem; letter-spacing:0.35em; text-transform:uppercase;
+  color:rgba(241,237,234,0.4);
+}
+.form-field input,
+.form-field select,
+.form-field textarea {
+  background:rgba(197,170,152,0.07);
+  border:1px solid var(--border); color:var(--cream);
+  padding:13px 16px;
+  font-family:'Cormorant Garamond',serif; font-size:1rem;
+  outline:none; transition:border-color .3s;
+  appearance:none; -webkit-appearance:none;
+  resize:none;
+}
+.form-field input::-webkit-calendar-picker-indicator {
+  filter:invert(0.7); cursor:pointer;
+}
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus { border-color:var(--gold); background:rgba(197,170,152,0.12); }
+
+/* Date range display */
+.date-range-display {
+  grid-column:span 2;
+  padding:16px 18px;
+  border:1px solid var(--border);
+  background:rgba(197,170,152,0.05);
+  display:flex; align-items:center; gap:14px;
+}
+.drd-label {
+  font-size:0.44rem; letter-spacing:0.35em; text-transform:uppercase;
+  color:rgba(241,237,234,0.35); flex-shrink:0;
+}
+.drd-dates {
+  display:flex; align-items:center; gap:10px; flex:1;
+  font-family:'Cormorant Garamond',serif; font-size:0.95rem;
+  color:var(--gold);
+}
+.drd-arrow { color:rgba(241,237,234,0.25); font-size:0.8rem; }
+.drd-nights {
+  margin-left:auto; font-size:0.44rem; letter-spacing:0.3em; text-transform:uppercase;
+  color:rgba(241,237,234,0.3);
+}
+
+/* Special services checkboxes */
+.services-checks {
+  grid-column:span 2;
+  display:grid; grid-template-columns:1fr 1fr; gap:10px;
+}
+.service-check-label {
+  grid-column:span 2;
+  font-size:0.46rem; letter-spacing:0.35em; text-transform:uppercase;
+  color:rgba(241,237,234,0.4); margin-bottom:2px;
+}
+.svc-check {
+  display:flex; align-items:center; gap:12px;
+  padding:13px 16px;
+  background:rgba(197,170,152,0.06);
+  border:1px solid var(--border);
+  cursor:pointer; transition:all .3s; user-select:none;
+}
+.svc-check:hover { border-color:var(--gold); background:rgba(197,170,152,0.12); }
+.svc-check.active { border-color:var(--gold); background:rgba(197,170,152,0.15); }
+.svc-check input[type="checkbox"] { display:none; }
+.svc-check-box {
+  width:18px; height:18px;
+  border:1px solid rgba(197,170,152,0.4);
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0; transition:all .3s;
+}
+.svc-check.active .svc-check-box { background:var(--gold); border-color:var(--gold); }
+.svc-check-tick { color:var(--dark); font-size:0.7rem; display:none; }
+.svc-check.active .svc-check-tick { display:block; }
+.svc-icon { font-size:1rem; }
+.svc-info { flex:1; }
+.svc-name {
+  font-family:'Cormorant Garamond',serif;
+  font-size:0.95rem; font-weight:600; color:var(--cream); display:block;
+}
+.svc-price {
+  font-size:0.46rem; letter-spacing:0.2em; color:var(--gold); display:block; margin-top:2px;
+}
+
+.form-total {
+  grid-column:span 2;
+  padding:16px 18px;
+  background:rgba(197,170,152,0.06);
+  border:1px solid var(--border);
+  display:flex; justify-content:space-between; align-items:center;
+}
+.form-total-label {
+  font-size:0.46rem; letter-spacing:0.35em; text-transform:uppercase;
+  color:rgba(241,237,234,0.4);
+}
+.form-total-price {
+  font-family:'Playfair Display',serif;
+  font-size:1.8rem; color:var(--gold);
+}
+.form-total-price sup {
+  font-size:0.85rem; vertical-align:super;
+}
+
+.btn-reserve {
+  grid-column:span 2; padding:16px;
+  background:var(--gold); color:var(--dark);
+  border:none; cursor:pointer;
+  font-family:'Jost',sans-serif; font-size:0.55rem;
+  letter-spacing:0.35em; text-transform:uppercase; font-weight:600;
+  transition:all .3s;
+}
+.btn-reserve:hover { background:var(--cream); transform:translateY(-2px); box-shadow:0 8px 28px rgba(0,0,0,0.25); }
+.form-disclaimer {
+  grid-column:span 2; text-align:center;
+  font-family:'Cormorant Garamond',serif; font-style:italic;
+  font-size:0.82rem; color:rgba(241,237,234,0.3);
+}
+
+/* ═══════════════════════════════════════════
+   SPECIAL SERVICES SECTION
+═══════════════════════════════════════════ */
+.services-section {
+  background:var(--dark);
+  padding:0 60px 80px;
+}
+.services-header { text-align:center; padding:88px 80px 60px; }
+.services-header .sec-body { max-width:560px; margin:0 auto; }
+
+.services-grid {
+  display:grid; grid-template-columns:repeat(4,1fr);
+  gap:3px; max-width:1280px; margin:0 auto;
+}
+
+.svc-card {
+  background:var(--panel);
+  border:1px solid var(--border);
+  overflow:hidden; position:relative;
+  transition:transform .35s, border-color .35s;
+  cursor:pointer;
+}
+.svc-card:hover { transform:translateY(-6px); border-color:rgba(197,170,152,0.35); z-index:5; }
+
+.svc-card-img {
+  height:220px; overflow:hidden; position:relative;
+}
+.svc-card-img img {
+  width:100%; height:100%; object-fit:cover;
+  transition:transform .7s, filter .5s;
+  filter:brightness(0.75) saturate(0.8);
+}
+.svc-card:hover .svc-card-img img { transform:scale(1.08); filter:brightness(0.85); }
+.svc-card-num {
+  position:absolute; top:14px; right:16px;
+  font-family:'Playfair Display',serif; font-size:0.6rem;
+  letter-spacing:0.3em; color:rgba(197,170,152,0.5);
+}
+
+.svc-card-body { padding:28px 24px 24px; }
+.svc-card-icon {
+  font-size:1.6rem; margin-bottom:14px; display:block;
+}
+.svc-card-tag {
+  font-size:0.44rem; letter-spacing:0.35em; text-transform:uppercase;
+  color:var(--gold); margin-bottom:6px;
+}
+.svc-card-title {
+  font-family:'Playfair Display',serif;
+  font-size:1.3rem; color:var(--cream); font-weight:400; margin-bottom:10px;
+}
+.svc-card-desc {
+  font-family:'Cormorant Garamond',serif; font-style:italic;
+  font-size:0.88rem; color:rgba(241,237,234,0.45); line-height:1.75; margin-bottom:18px;
+}
+.svc-card-footer {
+  display:flex; align-items:center; justify-content:space-between;
+  padding-top:16px; border-top:1px solid var(--border);
+}
+.svc-card-price {
+  font-family:'Playfair Display',serif;
+  font-size:1.1rem; color:var(--gold);
+}
+.svc-card-price span {
+  font-family:'Jost',sans-serif; font-size:0.62rem;
+  color:rgba(241,237,234,0.3); font-weight:300;
+}
+.svc-add-btn {
+  font-size:0.44rem; letter-spacing:0.25em; text-transform:uppercase;
+  padding:8px 16px; background:transparent;
+  border:1px solid var(--border); color:var(--gold);
+  cursor:pointer; transition:all .3s; font-family:'Jost',sans-serif;
+}
+.svc-add-btn:hover { background:var(--gold); color:var(--dark); border-color:var(--gold); }
+
+/* ── FEATURED SERVICE (wide) ── */
+.svc-card.wide {
+  grid-column:span 2;
+  display:grid; grid-template-columns:1fr 1fr;
+}
+.svc-card.wide .svc-card-img { height:100%; min-height:260px; }
+
+/* ═══════════════════════════════════════════
+   GALLERY / AUTO SCROLL
+═══════════════════════════════════════════ */
+.gallery-wrap { background:var(--dark); overflow:hidden; padding:5px 0; }
+.gallery-track {
+  display:flex; gap:5px;
+  animation:trackMove 36s linear infinite;
+  width:max-content;
+}
+.gallery-track:hover { animation-play-state:paused; }
+@keyframes trackMove {
+  from { transform:translateX(0); }
+  to   { transform:translateX(-50%); }
+}
+.gallery-item { width:320px; height:230px; overflow:hidden; flex-shrink:0; }
+.gallery-item img {
+  width:100%; height:100%; object-fit:cover;
+  transition:transform .5s, filter .4s;
+  filter:brightness(0.72) saturate(0.8);
+}
+.gallery-item:hover img { transform:scale(1.07); filter:brightness(1) saturate(1); }
+
+/* ═══════════════════════════════════════════
+   EXPERIENCE / AMBIANCE SPLIT
+═══════════════════════════════════════════ */
+.experience-section {
+  background:var(--cream);
+  display:grid; grid-template-columns:1fr 1fr;
+}
+.exp-visual { position:relative; overflow:hidden; min-height:560px; }
+.exp-visual img { width:100%; height:100%; object-fit:cover; transition:transform .9s; filter:brightness(0.9); }
+.exp-visual:hover img { transform:scale(1.04); }
+.exp-vis-badge {
+  position:absolute; bottom:28px; left:28px;
+  background:var(--dark); color:var(--gold);
+  padding:10px 22px;
+  font-family:'Jost',sans-serif; font-size:0.48rem;
+  letter-spacing:0.3em; text-transform:uppercase;
+}
+.exp-content {
+  background:var(--cream); padding:72px 60px;
+  display:flex; flex-direction:column; justify-content:center;
+}
+.exp-content .sec-title { color:var(--dark); }
+.exp-content .eyebrow { color:var(--gold); }
+.exp-content .sec-body { color:var(--mid); margin-top:16px; }
+.exp-features { margin-top:32px; display:flex; flex-direction:column; gap:16px; }
+.exp-feat {
+  display:flex; gap:16px; align-items:flex-start;
+  padding:18px 20px;
+  border:1px solid rgba(197,170,152,0.35);
+  background:rgba(197,170,152,0.06);
+  transition:background .3s;
+}
+.exp-feat:hover { background:rgba(197,170,152,0.14); }
+.exp-feat-icon { font-size:1.3rem; flex-shrink:0; }
+.exp-feat-title {
+  font-family:'Playfair Display',serif;
+  font-size:0.95rem; color:var(--dark); font-weight:600; margin-bottom:4px;
+}
+.exp-feat-desc {
+  font-family:'Cormorant Garamond',serif; font-style:italic;
+  font-size:0.88rem; color:var(--mid); line-height:1.6;
+}
+.exp-btn {
+  display:inline-block; margin-top:28px; padding:15px 36px;
+  background:var(--dark); color:var(--gold);
+  font-family:'Jost',sans-serif; font-size:0.52rem;
+  letter-spacing:0.35em; text-transform:uppercase;
+  border:none; cursor:pointer; transition:all .3s; text-decoration:none;
+}
+.exp-btn:hover { background:var(--gold); color:var(--dark); transform:translateY(-2px); }
+
+/* ═══════════════════════════════════════════
+   TESTIMONIALS
+═══════════════════════════════════════════ */
+.testimonials {
+  background:var(--deep);
+  padding:90px 80px;
+}
+.test-grid {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:3px; max-width:1200px; margin:48px auto 0;
+}
+.test-card {
+  background:rgba(197,170,152,0.04);
+  border:1px solid var(--border);
+  padding:36px 32px;
+  transition:background .3s, border-color .3s;
+}
+.test-card:hover { background:rgba(197,170,152,0.08); border-color:rgba(197,170,152,0.3); }
+.test-stars { color:var(--gold); font-size:0.85rem; letter-spacing:0.2em; margin-bottom:16px; }
+.test-text {
+  font-family:'Cormorant Garamond',serif; font-style:italic;
+  font-size:1rem; color:rgba(241,237,234,0.65); line-height:1.85; margin-bottom:22px;
+}
+.test-author { display:flex; align-items:center; gap:14px; }
+.test-avatar {
+  width:42px; height:42px; border-radius:50%;
+  overflow:hidden; border:1px solid var(--border);
+}
+.test-avatar img { width:100%; height:100%; object-fit:cover; filter:grayscale(20%); }
+.test-name {
+  font-family:'Playfair Display',serif;
+  font-size:0.9rem; color:var(--cream); display:block;
+}
+.test-label {
+  font-size:0.44rem; letter-spacing:0.3em; text-transform:uppercase;
+  color:var(--gold); display:block; margin-top:2px;
+}
+
+/* ═══════════════════════════════════════════
+   QUOTE
+═══════════════════════════════════════════ */
+.quote-section {
+  background:var(--dark); padding:90px 80px; text-align:center;
+  position:relative; overflow:hidden;
+}
+.quote-bg {
+  position:absolute; top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  font-family:'Playfair Display',serif;
+  font-size:22rem; color:rgba(197,170,152,0.025);
+  line-height:1; pointer-events:none; font-style:italic;
+}
+.quote-text {
+  font-family:'Cormorant Garamond',serif; font-style:italic;
+  font-size:clamp(1.5rem,2.8vw,2.3rem);
+  color:rgba(241,237,234,0.78); line-height:1.75;
+  max-width:820px; margin:0 auto 22px;
+  position:relative; z-index:1;
+}
+.quote-author {
+  font-size:0.5rem; letter-spacing:0.5em; text-transform:uppercase;
+  color:var(--gold); position:relative; z-index:1;
+}
+
+/* ═══════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════ */
+footer {
+  background:var(--deep);
+  padding:70px 80px 36px;
+  border-top:1px solid var(--border);
+}
+.footer-top {
+  display:grid; grid-template-columns:2fr 1fr 1fr 1fr;
+  gap:60px; margin-bottom:48px;
+}
+.footer-logo {
+  font-family:'Playfair Display',serif;
+  font-size:1.6rem; color:var(--cream); display:block;
+  margin-bottom:12px; font-weight:400;
+}
+.footer-logo span { color:var(--gold); font-style:italic; }
+.footer-tag {
+  font-family:'Cormorant Garamond',serif; font-style:italic;
+  font-size:0.92rem; color:rgba(241,237,234,0.28);
+  line-height:1.9; max-width:260px;
+}
+.footer-contact { margin-top:18px; }
+.footer-contact a {
+  font-family:'Playfair Display',serif;
+  font-size:1.5rem; color:var(--gold); display:block;
+  text-decoration:none; line-height:1;
+}
+.footer-contact span {
+  font-size:0.44rem; letter-spacing:0.3em; text-transform:uppercase;
+  color:rgba(241,237,234,0.25); display:block; margin-top:4px;
+}
+.fc-title {
+  font-size:0.46rem; letter-spacing:0.4em; text-transform:uppercase;
+  color:var(--gold); margin-bottom:20px; display:block;
+}
+.fc ul { list-style:none; display:flex; flex-direction:column; gap:12px; }
+.fc a {
+  font-family:'Cormorant Garamond',serif; font-size:0.95rem;
+  color:rgba(241,237,234,0.35); text-decoration:none; transition:color .3s;
+}
+.fc a:hover { color:var(--gold); }
+.footer-bottom {
+  display:flex; justify-content:space-between; align-items:center;
+  padding-top:28px; border-top:1px solid rgba(197,170,152,0.08);
+  flex-wrap:wrap; gap:14px;
+}
+.footer-copy { font-size:0.44rem; letter-spacing:0.2em; color:rgba(241,237,234,0.2); }
+.footer-soc { display:flex; gap:24px; }
+.footer-soc a {
+  font-size:0.44rem; letter-spacing:0.2em; text-transform:uppercase;
+  color:rgba(241,237,234,0.25); text-decoration:none; transition:color .3s;
+}
+.footer-soc a:hover { color:var(--gold); }
+
+/* ═══════════════════════════════════════════
+   SUCCESS MODAL
+═══════════════════════════════════════════ */
+.modal-overlay {
+  position:fixed; inset:0; z-index:9000;
+  background:rgba(14,10,7,0.9); backdrop-filter:blur(8px);
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none; transition:opacity .4s;
+}
+.modal-overlay.open { opacity:1; pointer-events:all; }
+.modal-box {
+  background:var(--panel);
+  border:1px solid rgba(197,170,152,0.25);
+  padding:56px; max-width:520px; width:90%; text-align:center;
+  transform:translateY(30px) scale(0.96);
+  transition:transform .4s;
+  position:relative;
+}
+.modal-overlay.open .modal-box { transform:translateY(0) scale(1); }
+.modal-close {
+  position:absolute; top:18px; right:22px;
+  background:none; border:none; cursor:pointer;
+  font-size:1.1rem; color:rgba(241,237,234,0.35);
+  transition:color .3s; line-height:1;
+}
+.modal-close:hover { color:var(--gold); }
+.modal-icon { font-size:3rem; display:block; margin-bottom:18px; }
+.modal-title {
+  font-family:'Playfair Display',serif;
+  font-size:2rem; color:var(--cream); font-weight:400; margin-bottom:8px;
+}
+.modal-sub {
+  font-family:'Cormorant Garamond',serif; font-style:italic;
+  font-size:1rem; color:var(--gold); margin-bottom:18px;
+}
+.modal-body {
+  font-family:'Cormorant Garamond',serif; font-style:italic;
+  font-size:0.9rem; color:rgba(241,237,234,0.5); line-height:1.8; margin-bottom:28px;
+}
+.modal-confirm-btn {
+  padding:14px 40px;
+  background:var(--gold); color:var(--dark);
+  border:none; cursor:pointer;
+  font-family:'Jost',sans-serif; font-size:0.52rem;
+  letter-spacing:0.35em; text-transform:uppercase; font-weight:600;
+  transition:all .3s;
+}
+.modal-confirm-btn:hover { background:var(--cream); }
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════ */
+@media(max-width:1100px){
+  nav, nav.scrolled { padding-left:32px; padding-right:32px; }
+  .nav-links { display:none; }
+  .hero-content { grid-template-columns:1fr; padding:0 32px 60px; }
+  .hero-booking { display:none; }
+  .strip { grid-template-columns:1fr 1fr; }
+  .rooms-section, .services-section { padding:0 20px 60px; }
+  .rooms-grid { grid-template-columns:1fr 1fr; }
+  .room-card.featured { grid-column:span 2; }
+  .reservation-section { padding:60px 32px; }
+  .reservation-inner { grid-template-columns:1fr; gap:40px; }
+  .services-grid { grid-template-columns:1fr 1fr; }
+  .svc-card.wide { grid-column:span 2; }
+  .experience-section { grid-template-columns:1fr; }
+  .exp-visual { min-height:360px; }
+  .exp-content { padding:50px 32px; }
+  .testimonials { padding:70px 32px; }
+  .test-grid { grid-template-columns:1fr; }
+  .footer-top { grid-template-columns:1fr 1fr; gap:36px; }
+  footer { padding:50px 32px 28px; }
+  .sec-header { padding:70px 32px 44px; }
+  .services-header { padding:70px 32px 44px; }
+  .quote-section { padding:70px 32px; }
+}
+@media(max-width:640px){
+  .strip { grid-template-columns:1fr; }
+  .rooms-grid { grid-template-columns:1fr; }
+  .room-card.featured { grid-column:span 1; }
+  .services-grid { grid-template-columns:1fr; }
+  .svc-card.wide { grid-column:span 1; grid-template-columns:1fr; }
+  .svc-card.wide .svc-card-img { height:220px; }
+  .form-grid { grid-template-columns:1fr; }
+  .form-field.full, .date-range-display,
+  .services-checks, .service-check-label,
+  .form-total, .btn-reserve, .form-disclaimer { grid-column:span 1; }
+  .services-checks { grid-template-columns:1fr; }
+  .footer-top { grid-template-columns:1fr; }
+  .test-grid { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div id="cdot"></div>
+<div id="cring"></div>
+
+<!-- ── NAV ── -->
+<nav id="mainNav">
+  <a href="#hero" class="nav-logo">Maison <span>Dorée</span></a>
+  <ul class="nav-links">
+    <li><a href="#rooms">Rooms</a></li>
+    <li><a href="#reserve">Reservations</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#experience">Experience</a></li>
+  </ul>
+  <a href="#reserve" class="nav-cta">Book Now</a>
+</nav>
+
+<!-- ═══════════════════════════════════════════
+     HERO
+═══════════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-left">
+      <span class="hero-eyebrow">Luxury Reservations</span>
+      <h1 class="hero-h1">The Art of<br><em>Refined</em><br>Stays</h1>
+      <p class="hero-sub">Where impeccable hospitality and timeless elegance converge. Reserve your sanctuary and let every detail be attended to with quiet perfection.</p>
+      <div class="hero-pills">
+        <div class="hero-pill">🛁 Spa & Wellness</div>
+        <div class="hero-pill">🚗 Private Transport</div>
+        <div class="hero-pill">🥐 Daily Breakfast</div>
+        <div class="hero-pill">🎂 Birthday Celebrations</div>
+      </div>
+    </div>
+
+    <!-- Quick Booking Panel -->
+    <div class="hero-booking">
+      <div class="booking-panel">
+        <div class="booking-panel-title">Reserve Your Stay</div>
+        <div class="booking-panel-sub">Complimentary concierge assistance</div>
+        <div class="booking-row">
+          <div class="booking-field">
+            <label>Check-In</label>
+            <input type="date" id="quickCheckin" onchange="updateQuickPanel()"/>
+          </div>
+          <div class="booking-field">
+            <label>Check-Out</label>
+            <input type="date" id="quickCheckout" onchange="updateQuickPanel()"/>
+          </div>
+        </div>
+        <div class="booking-row booking-guests">
+          <div class="booking-field">
+            <label>Guests</label>
+            <select id="quickGuests">
+              <option>1 Guest</option>
+              <option selected>2 Guests</option>
+              <option>3 Guests</option>
+              <option>4 Guests</option>
+              <option>5+ Guests</option>
+            </select>
+          </div>
+          <div class="booking-field">
+            <label>Suite Type</label>
+            <select>
+              <option>Deluxe Room</option>
+              <option>Junior Suite</option>
+              <option>Grand Suite</option>
+              <option>Penthouse</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn-book" onclick="scrollToReserve()">Check Availability</button>
+        <div class="booking-note">Free cancellation up to 48 hours prior</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INFO STRIP -->
+<div class="strip">
+  <div class="strip-cell reveal"><span class="strip-num">48</span><span class="strip-lbl">Luxury Suites</span><p class="strip-desc">Each designed with bespoke Italian furnishings</p></div>
+  <div class="strip-cell reveal d1"><span class="strip-num">5★</span><span class="strip-lbl">Rating</span><p class="strip-desc">Consistently rated among the world's finest</p></div>
+  <div class="strip-cell reveal d2"><span class="strip-num">14</span><span class="strip-lbl">Special Services</span><p class="strip-desc">From spa treatments to private celebrations</p></div>
+  <div class="strip-cell reveal d3"><span class="strip-num">1927</span><span class="strip-lbl">Established</span><p class="strip-desc">Nearly a century of legendary hospitality</p></div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     ROOMS
+═══════════════════════════════════════════ -->
+<div class="sec-header reveal" id="rooms">
+  <span class="eyebrow">Accommodations</span>
+  <h2 class="sec-title">Our Rooms & Suites</h2>
+  <span class="sec-orn">— — —</span>
+  <p class="sec-body">From intimate deluxe rooms to palatial penthouses, every space is a sanctuary of handcrafted luxury, natural light and considered detail.</p>
+</div>
+
+<div class="rooms-section">
+  <div class="rooms-grid">
+    <div class="room-card featured reveal" style="cursor:pointer" onclick="scrollToReserve()">
+      <div class="rc-img" style="background-image:url('https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=1200&q=85')"></div>
+      <div class="rc-overlay"></div>
+      <div class="rc-content">
+        <div class="rc-badge">Most Popular</div>
+        <span class="rc-tag">Grand Suite</span>
+        <h3 class="rc-title">The Grand Suite</h3>
+        <p class="rc-desc">120m² of pure indulgence. Private terrace overlooking the city, hand-stitched silk linens, a soaking tub carved from Carrara marble and a butler on call around the clock.</p>
+        <div class="rc-footer">
+          <div class="rc-price">$1,840 <span>/ night</span></div>
+          <button class="rc-btn">Reserve Suite</button>
+        </div>
+      </div>
+    </div>
+    <div class="room-card reveal d1" onclick="scrollToReserve()">
+      <div class="rc-img" style="background-image:url('https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=900&q=85')"></div>
+      <div class="rc-overlay"></div>
+      <div class="rc-content">
+        <span class="rc-tag">Junior Suite</span>
+        <h3 class="rc-title">Junior Suite</h3>
+        <p class="rc-desc">A refined retreat with a king bed, sitting area and private balcony overlooking the gardens.</p>
+        <div class="rc-footer">
+          <div class="rc-price">$920 <span>/ night</span></div>
+          <button class="rc-btn">Reserve</button>
+        </div>
+      </div>
+    </div>
+    <div class="room-card reveal d2" onclick="scrollToReserve()">
+      <div class="rc-img" style="background-image:url('https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=900&q=85')"></div>
+      <div class="rc-overlay"></div>
+      <div class="rc-content">
+        <span class="rc-tag">Deluxe Room</span>
+        <h3 class="rc-title">Deluxe Room</h3>
+        <p class="rc-desc">The ideal base for the discerning traveller. Warm tones, premium bedding and every thoughtful amenity.</p>
+        <div class="rc-footer">
+          <div class="rc-price">$640 <span>/ night</span></div>
+          <button class="rc-btn">Reserve</button>
+        </div>
+      </div>
+    </div>
+    <div class="room-card featured reveal d1" onclick="scrollToReserve()">
+      <div class="rc-img" style="background-image:url('https://images.unsplash.com/photo-1602872030490-4a484a7b3ba6?w=1200&q=85')"></div>
+      <div class="rc-overlay"></div>
+      <div class="rc-content">
+        <div class="rc-badge">Exclusive</div>
+        <span class="rc-tag">Penthouse</span>
+        <h3 class="rc-title">The Penthouse</h3>
+        <p class="rc-desc">The crown of Maison Dorée. Two floors of unrivalled luxury, a private rooftop pool, dining room for twelve, and panoramic views across the entire city skyline.</p>
+        <div class="rc-footer">
+          <div class="rc-price">$4,200 <span>/ night</span></div>
+          <button class="rc-btn">Reserve Penthouse</button>
+        </div>
+      </div>
+    </div>
+    <div class="room-card reveal d3" onclick="scrollToReserve()">
+      <div class="rc-img" style="background-image:url('https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?w=900&q=85')"></div>
+      <div class="rc-overlay"></div>
+      <div class="rc-content">
+        <span class="rc-tag">Garden Villa</span>
+        <h3 class="rc-title">Garden Villa</h3>
+        <p class="rc-desc">A private villa with direct garden access, plunge pool and sun terrace for two.</p>
+        <div class="rc-footer">
+          <div class="rc-price">$2,100 <span>/ night</span></div>
+          <button class="rc-btn">Reserve</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     RESERVATION FORM
+═══════════════════════════════════════════ -->
+<div class="reservation-section" id="reserve">
+  <div class="reservation-inner">
+    <div class="res-text reveal">
+      <span class="eyebrow">Make a Reservation</span>
+      <h2 class="sec-title" style="color:var(--dark)">Your Perfect<br>Stay Awaits</h2>
+      <span class="sec-orn" style="color:var(--gold)">— — —</span>
+      <p class="sec-body" style="color:var(--mid)">Complete the form to reserve your preferred dates and add our exclusive special services. Our concierge will confirm your booking within the hour.</p>
+
+      <div class="res-img-stack" style="margin-top:32px">
+        <div class="res-img-cell">
+          <img src="https://images.unsplash.com/photo-1615460549969-36fa19521a4f?w=900&q=80" alt="Luxury hotel lobby"/>
+        </div>
+        <div class="res-img-cell">
+          <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600&q=80" alt="Spa treatment"/>
+        </div>
+        <div class="res-img-cell">
+          <img src="https://images.unsplash.com/photo-1559329007-40df8a9345d8?w=600&q=80" alt="Fine dining breakfast"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="res-form-wrap reveal d2">
+      <div class="res-form-title">Reservation Details</div>
+      <div class="res-form-sub">Select your dates, suite and special additions</div>
+
+      <div class="form-grid">
+        <!-- Guest Info -->
+        <div class="form-field">
+          <label>First Name</label>
+          <input type="text" placeholder="Alexandra" id="firstName"/>
+        </div>
+        <div class="form-field">
+          <label>Last Name</label>
+          <input type="text" placeholder="Beaumont" id="lastName"/>
+        </div>
+        <div class="form-field">
+          <label>Email Address</label>
+          <input type="email" placeholder="alexandra@example.com" id="email"/>
+        </div>
+        <div class="form-field">
+          <label>Phone</label>
+          <input type="tel" placeholder="+1 (555) 000-0000" id="phone"/>
+        </div>
+
+        <!-- Dates -->
+        <div class="form-field">
+          <label>Check-In Date</label>
+          <input type="date" id="checkin" onchange="updateDates()"/>
+        </div>
+        <div class="form-field">
+          <label>Check-Out Date</label>
+          <input type="date" id="checkout" onchange="updateDates()"/>
+        </div>
+
+        <!-- Date Range Display -->
+        <div class="date-range-display">
+          <span class="drd-label">Stay</span>
+          <div class="drd-dates">
+            <span id="drd-checkin" style="color:rgba(241,237,234,0.4)">Select check-in</span>
+            <span class="drd-arrow">→</span>
+            <span id="drd-checkout" style="color:rgba(241,237,234,0.4)">Select check-out</span>
+          </div>
+          <span class="drd-nights" id="drd-nights">— nights</span>
+        </div>
+
+        <!-- Suite & Guests -->
+        <div class="form-field">
+          <label>Suite Type</label>
+          <select id="suiteType" onchange="updateTotal()">
+            <option value="640">Deluxe Room — $640/night</option>
+            <option value="920">Junior Suite — $920/night</option>
+            <option value="1840" selected>Grand Suite — $1,840/night</option>
+            <option value="2100">Garden Villa — $2,100/night</option>
+            <option value="4200">Penthouse — $4,200/night</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>Guests</label>
+          <select id="guestCount">
+            <option>1 Guest</option>
+            <option selected>2 Guests</option>
+            <option>3 Guests</option>
+            <option>4 Guests</option>
+            <option>5+ Guests</option>
+          </select>
+        </div>
+
+        <!-- Special Services -->
+        <div class="services-checks">
+          <span class="service-check-label">Special Services (add to reservation)</span>
+
+          <div class="svc-check" id="svc-spa" onclick="toggleService('spa',280)">
+            <input type="checkbox" id="cb-spa"/>
+            <div class="svc-check-box"><span class="svc-check-tick">✓</span></div>
+            <span class="svc-icon">🛁</span>
+            <div class="svc-info">
+              <span class="svc-name">Spa & Wellness</span>
+              <span class="svc-price">+$280 / stay</span>
+            </div>
+          </div>
+
+          <div class="svc-check" id="svc-transport" onclick="toggleService('transport',180)">
+            <input type="checkbox" id="cb-transport"/>
+            <div class="svc-check-box"><span class="svc-check-tick">✓</span></div>
+            <span class="svc-icon">🚗</span>
+            <div class="svc-info">
+              <span class="svc-name">Private Transport</span>
+              <span class="svc-price">+$180 / transfer</span>
+            </div>
+          </div>
+
+          <div class="svc-check" id="svc-breakfast" onclick="toggleService('breakfast',95)">
+            <input type="checkbox" id="cb-breakfast"/>
+            <div class="svc-check-box"><span class="svc-check-tick">✓</span></div>
+            <span class="svc-icon">🥐</span>
+            <div class="svc-info">
+              <span class="svc-name">Daily Breakfast</span>
+              <span class="svc-price">+$95 / person / day</span>
+            </div>
+          </div>
+
+          <div class="svc-check" id="svc-birthday" onclick="toggleService('birthday',450)">
+            <input type="checkbox" id="cb-birthday"/>
+            <div class="svc-check-box"><span class="svc-check-tick">✓</span></div>
+            <span class="svc-icon">🎂</span>
+            <div class="svc-info">
+              <span class="svc-name">Birthday Party Package</span>
+              <span class="svc-price">+$450 / celebration</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Special Requests -->
+        <div class="form-field full">
+          <label>Special Requests</label>
+          <textarea id="requests" rows="3" placeholder="Champagne on arrival, allergen-free menu, specific pillow preferences…"></textarea>
+        </div>
+
+        <!-- Total -->
+        <div class="form-total">
+          <span class="form-total-label">Estimated Total</span>
+          <div class="form-total-price"><sup>$</sup><span id="totalPrice">0</span></div>
+        </div>
+
+        <!-- Submit -->
+        <button class="btn-reserve" onclick="submitReservation()">Confirm Reservation</button>
+        <div class="form-disclaimer">Free cancellation · No deposit required · Secure booking</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SPECIAL SERVICES
+═══════════════════════════════════════════ -->
+<div id="services">
+  <div class="services-header sec-header reveal">
+    <span class="eyebrow">Special Services</span>
+    <h2 class="sec-title">Elevate Your Stay</h2>
+    <span class="sec-orn">— — —</span>
+    <p class="sec-body">Curated additions to transform your reservation into a complete luxury experience. Each service is delivered by our specialist teams with an uncompromising dedication to excellence.</p>
+  </div>
+
+  <div class="services-section">
+    <div class="services-grid">
+
+      <!-- SPA — wide featured -->
+      <div class="svc-card wide reveal">
+        <div class="svc-card-img">
+          <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=1000&q=85" alt="Luxury Spa"/>
+          <span class="svc-card-num">01</span>
+        </div>
+        <div class="svc-card-body">
+          <span class="svc-card-icon">🛁</span>
+          <span class="svc-card-tag">Wellness & Relaxation</span>
+          <h3 class="svc-card-title">Spa & Wellness Retreat</h3>
+          <p class="svc-card-desc">Surrender to our award-winning spa — hot stone massages, deep tissue therapies, facial rituals, thermal pools and a hammam suite. A full day of curated wellbeing designed around you, with products from La Mer and Sisley.</p>
+          <div class="svc-card-footer">
+            <div class="svc-card-price">$280 <span>/ stay</span></div>
+            <button class="svc-add-btn" onclick="scrollToReserve()">Add to Reservation</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TRANSPORT -->
+      <div class="svc-card reveal d1">
+        <div class="svc-card-img">
+          <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=700&q=85" alt="Luxury Transport"/>
+          <span class="svc-card-num">02</span>
+        </div>
+        <div class="svc-card-body">
+          <span class="svc-card-icon">🚗</span>
+          <span class="svc-card-tag">Private Transfer</span>
+          <h3 class="svc-card-title">Chauffeur & Transport</h3>
+          <p class="svc-card-desc">Mercedes S-Class and Rolls-Royce transfers from airport to hotel and for any journey during your stay. Punctual, discreet, impeccably dressed drivers.</p>
+          <div class="svc-card-footer">
+            <div class="svc-card-price">$180 <span>/ transfer</span></div>
+            <button class="svc-add-btn" onclick="scrollToReserve()">Add Service</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- BREAKFAST -->
+      <div class="svc-card reveal d2">
+        <div class="svc-card-img">
+          <img src="https://images.unsplash.com/photo-1559329007-40df8a9345d8?w=700&q=85" alt="Breakfast"/>
+          <span class="svc-card-num">03</span>
+        </div>
+        <div class="svc-card-body">
+          <span class="svc-card-icon">🥐</span>
+          <span class="svc-card-tag">Culinary Experience</span>
+          <h3 class="svc-card-title">Daily Breakfast</h3>
+          <p class="svc-card-desc">A lavish a la carte morning feast in our dining room or delivered to your suite. Freshly baked viennoiseries, seasonal fruit, artisanal cheeses and Michelin-starred eggs Benedict.</p>
+          <div class="svc-card-footer">
+            <div class="svc-card-price">$95 <span>/ person / day</span></div>
+            <button class="svc-add-btn" onclick="scrollToReserve()">Add Service</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- BIRTHDAY — wide featured -->
+      <div class="svc-card wide reveal d1">
+        <div class="svc-card-img">
+          <img src="https://images.unsplash.com/photo-1464349153735-7db50ed83c84?w=1000&q=85" alt="Birthday Celebration"/>
+          <span class="svc-card-num">04</span>
+        </div>
+        <div class="svc-card-body">
+          <span class="svc-card-icon">🎂</span>
+          <span class="svc-card-tag">Celebrations & Events</span>
+          <h3 class="svc-card-title">Birthday Party Package</h3>
+          <p class="svc-card-desc">Bespoke birthday celebrations curated to every last detail — floral arrangements, personalised cakes by our pâtissier, champagne selection, live music arrangements, private dining room and a dedicated events coordinator. Unforgettable moments, perfectly orchestrated.</p>
+          <div class="svc-card-footer">
+            <div class="svc-card-price">$450 <span>/ celebration</span></div>
+            <button class="svc-add-btn" onclick="scrollToReserve()">Add to Reservation</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- BUTLER -->
+      <div class="svc-card reveal d2">
+        <div class="svc-card-img">
+          <img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=700&q=85" alt="Butler Service"/>
+          <span class="svc-card-num">05</span>
+        </div>
+        <div class="svc-card-body">
+          <span class="svc-card-icon">🤵</span>
+          <span class="svc-card-tag">Personal Service</span>
+          <h3 class="svc-card-title">Personal Butler</h3>
+          <p class="svc-card-desc">A dedicated 24/7 butler to manage every request — wardrobe, reservations, in-suite dining and more.</p>
+          <div class="svc-card-footer">
+            <div class="svc-card-price">$320 <span>/ stay</span></div>
+            <button class="svc-add-btn" onclick="scrollToReserve()">Add Service</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- DINING -->
+      <div class="svc-card reveal d3">
+        <div class="svc-card-img">
+          <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=700&q=85" alt="Fine Dining"/>
+          <span class="svc-card-num">06</span>
+        </div>
+        <div class="svc-card-body">
+          <span class="svc-card-icon">🍽️</span>
+          <span class="svc-card-tag">Gastronomy</span>
+          <h3 class="svc-card-title">Private Dining</h3>
+          <p class="svc-card-desc">Exclusive tasting menus by our two-Michelin-star chef, served in your suite or private dining salon.</p>
+          <div class="svc-card-footer">
+            <div class="svc-card-price">$220 <span>/ person</span></div>
+            <button class="svc-add-btn" onclick="scrollToReserve()">Add Service</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- GALLERY STRIP -->
+<div class="gallery-wrap">
+  <div class="gallery-track">
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=640&q=75" alt="Suite"/></div>
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=640&q=75" alt="Spa"/></div>
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=640&q=75" alt="Transport"/></div>
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1559329007-40df8a9345d8?w=640&q=75" alt="Breakfast"/></div>
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1464349153735-7db50ed83c84?w=640&q=75" alt="Birthday"/></div>
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=640&q=75" alt="Room"/></div>
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1602872030490-4a484a7b3ba6?w=640&q=75" alt="Penthouse"/></div>
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=640&q=75" alt="Dining"/></div>
+    <!-- duplicate -->
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=640&q=75" alt="Suite"/></div>
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=640&q=75" alt="Spa"/></div>
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=640&q=75" alt="Transport"/></div>
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1559329007-40df8a9345d8?w=640&q=75" alt="Breakfast"/></div>
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1464349153735-7db50ed83c84?w=640&q=75" alt="Birthday"/></div>
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=640&q=75" alt="Room"/></div>
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1602872030490-4a484a7b3ba6?w=640&q=75" alt="Penthouse"/></div>
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=640&q=75" alt="Dining"/></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     EXPERIENCE
+═══════════════════════════════════════════ -->
+<div class="experience-section" id="experience">
+  <div class="exp-visual reveal">
+    <img src="https://images.unsplash.com/photo-1615460549969-36fa19521a4f?w=1000&q=85" alt="Hotel Lobby"/>
+    <div class="exp-vis-badge">Est. 1927 · Paris</div>
+  </div>
+  <div class="exp-content reveal d2">
+    <span class="eyebrow">The Maison Dorée Experience</span>
+    <h2 class="sec-title" style="color:var(--dark)">A Legacy of<br>Perfection</h2>
+    <span class="sec-orn" style="color:var(--gold)">— — —</span>
+    <p class="sec-body" style="color:var(--mid)">Since 1927, Maison Dorée has set the standard for what luxury accommodation should feel like — a place where time slows, every need is met before it is expressed, and the extraordinary becomes ordinary.</p>
+    <div class="exp-features">
+      <div class="exp-feat">
+        <span class="exp-feat-icon">🏛️</span>
+        <div>
+          <div class="exp-feat-title">Heritage Architecture</div>
+          <p class="exp-feat-desc">Beaux-Arts interiors with original gilded ceilings, Venetian mirrors and Aubusson tapestries.</p>
+        </div>
+      </div>
+      <div class="exp-feat">
+        <span class="exp-feat-icon">👨‍🍳</span>
+        <div>
+          <div class="exp-feat-title">Two Michelin-Star Kitchen</div>
+          <p class="exp-feat-desc">Chef Henri Marceau curates seasonal menus celebrating the finest produce from land and sea.</p>
+        </div>
+      </div>
+      <div class="exp-feat">
+        <span class="exp-feat-icon">🌿</span>
+        <div>
+          <div class="exp-feat-title">Rooftop Garden & Pool</div>
+          <p class="exp-feat-desc">An elevated oasis above the city — heated pool, bar service and panoramic skyline views.</p>
+        </div>
+      </div>
+    </div>
+    <a href="#reserve" class="exp-btn">Book Your Experience</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     TESTIMONIALS
+═══════════════════════════════════════════ -->
+<div class="testimonials">
+  <div class="sec-header reveal" style="padding:0 0 0;text-align:center">
+    <span class="eyebrow">Guest Reviews</span>
+    <h2 class="sec-title">Voices of Our Guests</h2>
+    <span class="sec-orn">— — —</span>
+  </div>
+  <div class="test-grid">
+    <div class="test-card reveal d1">
+      <div class="test-stars">★★★★★</div>
+      <p class="test-text">"The Grand Suite was everything and more. The spa package they added to our reservation was seamless — we arrived to rose petals, champagne and a full evening of treatments. Absolutely flawless."</p>
+      <div class="test-author">
+        <div class="test-avatar"><img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=100&q=80" alt="Guest"/></div>
+        <div>
+          <span class="test-name">Charlotte Beaumont</span>
+          <span class="test-label">Grand Suite · Anniversary Stay</span>
+        </div>
+      </div>
+    </div>
+    <div class="test-card reveal d2">
+      <div class="test-stars">★★★★★</div>
+      <p class="test-text">"The birthday package they arranged for my wife was beyond anything we could have imagined. The personalised cake, the flowers, the private dining room — every detail was considered. We will return every year."</p>
+      <div class="test-author">
+        <div class="test-avatar"><img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&q=80" alt="Guest"/></div>
+        <div>
+          <span class="test-name">James Whitfield</span>
+          <span class="test-label">Penthouse · Birthday Celebration</span>
+        </div>
+      </div>
+    </div>
+    <div class="test-card reveal d3">
+      <div class="test-stars">★★★★★</div>
+      <p class="test-text">"From the Rolls-Royce pickup at the airport to the daily breakfast delivered to our suite at precisely 9am — the level of service at Maison Dorée is simply without compare in our 30 years of travel."</p>
+      <div class="test-author">
+        <div class="test-avatar"><img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&q=80" alt="Guest"/></div>
+        <div>
+          <span class="test-name">Isabelle Fontaine</span>
+          <span class="test-label">Garden Villa · Annual Stay</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- QUOTE -->
+<div class="quote-section reveal">
+  <div class="quote-bg">"</div>
+  <p class="quote-text">"A true luxury hotel does not merely offer accommodation — it offers transformation. Every guest who enters should leave changed, rested, nourished and reminded of how beautiful life can be."</p>
+  <span class="quote-author">— Henri Marceau · Executive Director, Maison Dorée</span>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════ -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <span class="footer-logo">Maison <span>Dorée</span></span>
+      <p class="footer-tag">A sanctuary of timeless luxury and impeccable hospitality. Est. 1927, Paris. Five-star rated, endlessly curated.</p>
+      <div class="footer-contact">
+        <a href="tel:+33143001927">+33 1 43 00 1927</a>
+        <span>Reservations & Concierge</span>
+      </div>
+    </div>
+    <div class="fc">
+      <span class="fc-title">Rooms</span>
+      <ul>
+        <li><a href="#">Deluxe Room</a></li>
+        <li><a href="#">Junior Suite</a></li>
+        <li><a href="#">Grand Suite</a></li>
+        <li><a href="#">Garden Villa</a></li>
+        <li><a href="#">Penthouse</a></li>
+      </ul>
+    </div>
+    <div class="fc">
+      <span class="fc-title">Services</span>
+      <ul>
+        <li><a href="#">Spa & Wellness</a></li>
+        <li><a href="#">Private Transport</a></li>
+        <li><a href="#">Daily Breakfast</a></li>
+        <li><a href="#">Birthday Parties</a></li>
+        <li><a href="#">Private Dining</a></li>
+        <li><a href="#">Personal Butler</a></li>
+      </ul>
+    </div>
+    <div class="fc">
+      <span class="fc-title">Hotel</span>
+      <ul>
+        <li><a href="#">About Maison Dorée</a></li>
+        <li><a href="#">Gallery</a></li>
+        <li><a href="#">Restaurants</a></li>
+        <li><a href="#">Events</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2024 Maison Dorée · All Rights Reserved · Luxury Hotel · Paris · Est. 1927</p>
+    <div class="footer-soc">
+      <a href="#">Instagram</a>
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<!-- SUCCESS MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <span class="modal-icon">✦</span>
+    <h3 class="modal-title">Reservation Received</h3>
+    <div class="modal-sub" id="modal-ref">Reference: MD-2024-00001</div>
+    <p class="modal-body" id="modal-body">Thank you for choosing Maison Dorée. Your reservation has been received and our concierge team will confirm all details within the hour. A confirmation has been sent to your email address.</p>
+    <button class="modal-confirm-btn" onclick="closeModal()">Perfect, Thank You</button>
+  </div>
+</div>
+
+<script>
+/* ── CURSOR ── */
+const dot  = document.getElementById('cdot');
+const ring = document.getElementById('cring');
+let rx=0, ry=0;
+document.addEventListener('mousemove', e=>{
+  dot.style.left  = e.clientX+'px';
+  dot.style.top   = e.clientY+'px';
+});
+(function loop(){
+  rx += (parseFloat(dot.style.left||0)-rx)*0.13;
+  ry += (parseFloat(dot.style.top||0)-ry)*0.13;
+  ring.style.left=rx+'px'; ring.style.top=ry+'px';
+  requestAnimationFrame(loop);
+})();
+
+/* ── STICKY NAV ── */
+const nav = document.getElementById('mainNav');
+window.addEventListener('scroll', ()=>{
+  nav.classList.toggle('scrolled', window.scrollY > 60);
+});
+
+/* ── SCROLL REVEAL ── */
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){ e.target.classList.add('in'); observer.unobserve(e.target); }
+  });
+}, {threshold:0.07});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+/* ── DATE LOGIC ── */
+// Set default dates (today + 3 days / today + 6 days)
+window.addEventListener('DOMContentLoaded', ()=>{
+  const today = new Date();
+  const ci = new Date(today); ci.setDate(today.getDate()+3);
+  const co = new Date(today); co.setDate(today.getDate()+6);
+
+  const fmt = d => d.toISOString().split('T')[0];
+  document.getElementById('checkin').value  = fmt(ci);
+  document.getElementById('checkout').value = fmt(co);
+  document.getElementById('quickCheckin').value  = fmt(ci);
+  document.getElementById('quickCheckout').value = fmt(co);
+
+  updateDates();
+  updateTotal();
+});
+
+function updateDates(){
+  const ci = document.getElementById('checkin').value;
+  const co = document.getElementById('checkout').value;
+
+  const formatDisplay = s => {
+    if(!s) return null;
+    const d = new Date(s+'T00:00:00');
+    return d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+  };
+
+  const ciEl = document.getElementById('drd-checkin');
+  const coEl = document.getElementById('drd-checkout');
+  const nightsEl = document.getElementById('drd-nights');
+
+  if(ci){ ciEl.textContent = formatDisplay(ci); ciEl.style.color='var(--gold)'; }
+  else   { ciEl.textContent='Select check-in'; ciEl.style.color='rgba(241,237,234,0.4)'; }
+
+  if(co){ coEl.textContent = formatDisplay(co); coEl.style.color='var(--gold)'; }
+  else   { coEl.textContent='Select check-out'; coEl.style.color='rgba(241,237,234,0.4)'; }
+
+  if(ci && co){
+    const nights = Math.round((new Date(co)-new Date(ci))/(1000*60*60*24));
+    nightsEl.textContent = nights > 0 ? nights+' night'+(nights!==1?'s':'') : '—';
+  } else {
+    nightsEl.textContent = '— nights';
+  }
+  updateTotal();
+}
+
+/* ── SERVICE TOGGLES ── */
+const svcExtras = {};
+
+function toggleService(id, price){
+  const el = document.getElementById('svc-'+id);
+  const active = el.classList.toggle('active');
+  svcExtras[id] = active ? price : 0;
+  updateTotal();
+}
+
+/* ── TOTAL CALCULATOR ── */
+function updateTotal(){
+  const ci = document.getElementById('checkin').value;
+  const co = document.getElementById('checkout').value;
+  const suiteEl = document.getElementById('suiteType');
+  const ratePerNight = suiteEl ? parseFloat(suiteEl.value) : 0;
+
+  let nights = 0;
+  if(ci && co){
+    nights = Math.max(0, Math.round((new Date(co)-new Date(ci))/(1000*60*60*24)));
+  }
+  const roomTotal = ratePerNight * nights;
+  const extras = Object.values(svcExtras).reduce((a,b)=>a+b,0);
+  const total = roomTotal + extras;
+
+  document.getElementById('totalPrice').textContent = total > 0 ? total.toLocaleString('en-US') : '0';
+}
+
+/* ── SCROLL TO RESERVE ── */
+function scrollToReserve(){
+  document.getElementById('reserve').scrollIntoView({behavior:'smooth'});
+}
+
+/* ── FORM SUBMIT ── */
+let refNum = 1000 + Math.floor(Math.random()*8999);
+
+function submitReservation(){
+  const fn = document.getElementById('firstName').value.trim();
+  const ln = document.getElementById('lastName').value.trim();
+  const em = document.getElementById('email').value.trim();
+  const ci = document.getElementById('checkin').value;
+  const co = document.getElementById('checkout').value;
+
+  if(!fn||!ln){ alert('Please enter your name.'); return; }
+  if(!em||!em.includes('@')){ alert('Please enter a valid email address.'); return; }
+  if(!ci||!co){ alert('Please select check-in and check-out dates.'); return; }
+  if(new Date(co) <= new Date(ci)){ alert('Check-out must be after check-in.'); return; }
+
+  const nights = Math.round((new Date(co)-new Date(ci))/(1000*60*60*24));
+  const suite = document.getElementById('suiteType');
+  const suiteName = suite.options[suite.selectedIndex].text.split('—')[0].trim();
+
+  const activeServices = [];
+  if(document.getElementById('svc-spa').classList.contains('active'))       activeServices.push('Spa & Wellness');
+  if(document.getElementById('svc-transport').classList.contains('active')) activeServices.push('Private Transport');
+  if(document.getElementById('svc-breakfast').classList.contains('active')) activeServices.push('Daily Breakfast');
+  if(document.getElementById('svc-birthday').classList.contains('active'))  activeServices.push('Birthday Package');
+
+  const total = document.getElementById('totalPrice').textContent;
+
+  refNum++;
+  document.getElementById('modal-ref').textContent = `Reference: MD-2024-${refNum}`;
+  document.getElementById('modal-body').textContent =
+    `Dear ${fn} ${ln}, your reservation for the ${suiteName} for ${nights} night${nights!==1?'s':''} has been received. ` +
+    (activeServices.length ? `Added services: ${activeServices.join(', ')}. ` : '') +
+    `Estimated total: $${total}. Our concierge will contact you at ${em} within the hour.`;
+
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeModal(){
+  document.getElementById('modal').classList.remove('open');
+  document.body.style.overflow='';
+}
+document.getElementById('modal').addEventListener('click', e=>{
+  if(e.target===document.getElementById('modal')) closeModal();
+});
+document.addEventListener('keydown', e=>{
+  if(e.key==='Escape') closeModal();
+});
+</script>
+</body>
+</html>
